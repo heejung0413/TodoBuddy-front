@@ -46,7 +46,7 @@ const IndexPage = () => {
         </Flex>
       </Grid>
       <Text margin="30px auto" color="gray" fontSize={12}>
-        Copyright © 2024 All rights reserved | This Site is made with  by heejung/heemang/sun-ae
+        Copyright © 2024 All rights reserved | This Site is made with by heejung/heemang/sun-ae
       </Text>
     </S.Container>
   );
