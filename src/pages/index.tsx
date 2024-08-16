@@ -1,6 +1,6 @@
 import { Button, Flex, Grid, Image, Input, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/react';
 import logo from '/public/Logo.svg';
-import * as S from '@/styles/index/index.styles';
+import * as S from '@/styles/home/index.styles';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 
 import { useState } from 'react';

@@ -1,17 +1,25 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import IndexPage from './pages';
-import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import theme from './styles/theme';
 import HomePage from './pages/home';
+import Layout from './components/Layout';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <IndexPage />,
+    children: [
+      { index: true, element: <IndexPage /> },
+      {
+        path: 'home',
+        element: <Layout />,
+        children: [{ index: true, element: <HomePage /> }],
+      },
+    ],
   },
   {
     path: '/home',
+
     element: <HomePage />,
   },
 ]);

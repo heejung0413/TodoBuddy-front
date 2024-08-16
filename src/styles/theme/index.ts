@@ -7,7 +7,7 @@ const config: ThemeConfig = {
 };
 
 const appStyles = {
-  maxWidth: '768px',
+  maxWidth: '1280px',
   paddingX: '12px',
   headerHeight: { base: '48px', md: '56px' },
   asideHeight: '56px',
