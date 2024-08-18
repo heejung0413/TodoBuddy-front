@@ -12,6 +12,7 @@ import {
   Divider,
   Text,
   IconProps,
+  HStack,
 } from '@chakra-ui/react';
 import { MdOutlineLink } from 'react-icons/md';
 
@@ -39,22 +40,20 @@ const MemoList = () => {
               </Badge>
             </Box>
 
-            <Flex margin="5px 0" flexDirection="column" gap={5}>
-              <Checkbox size="lg" colorScheme="gray" defaultChecked>
-                <Box>
-                  <Flex justifyContent="space-around" borderBottom="2px solid black" width="100%">
+            <Flex margin="5px 0" flexDirection="column" gap={5} w="100%">
+              <Flex>
+                <Checkbox size="lg" colorScheme="gray" flexGrow={1}>
+                  <HStack>
                     <Text my="auto">토익영단어 외우기</Text>
-                    <Flex>
-                      <SettingMemo />
-                    </Flex>
-                  </Flex>
+                  </HStack>
 
                   <Text color="gray" fontSize="0.8em">
                     3월 28일, 18시
                   </Text>
-                </Box>
-              </Checkbox>
-              <Checkbox size="lg" colorScheme="gray" defaultChecked>
+                </Checkbox>
+                <SettingMemo />
+              </Flex>
+              <Checkbox size="lg" colorScheme="gray">
                 <Box>
                   토익영단어 외우기
                   <IconStyle background-color={colors.brand[300]}>
@@ -80,12 +79,13 @@ export default MemoList;
 
 export const IconStyle = styled.button<IconProps>`
   border-radius: 20px;
+  margin-top: 0;
   background-color: ${props => props['background-color']};
   width: auto;
   position: relative;
   border-radius: ${props => props['border-radius']};
   display: inline-block;
   padding: 5px;
-  margin: 5px;
+  margin: auto 5px;
   min-width: max-content;
 `;

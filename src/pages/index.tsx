@@ -1,25 +1,22 @@
 import { Button, Flex, Grid, Image, Input, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/react';
-import logo from '/public/Logo.svg';
 import * as S from '@/styles/home/index.styles';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '@/components/utils/Logo';
 
 const IndexPage = () => {
   const [show, setShow] = useState<Boolean>(false);
   const navigate = useNavigate();
   return (
     <S.Container>
-      <VStack gap={3}>
-        <Image src={logo} width={200} margin="0 auto" />
-        <Text color="brand.900">메모장과 친구가 되어보세요!</Text>
-      </VStack>
+      <Logo />
       <Grid justifyContent="center">
         <VStack>
           <Flex margin="0 auto">
             <Text minW="60px" margin="auto 10px">
-              아이디
+              이메일
             </Text>
             <Input width={300} />
           </Flex>
@@ -41,12 +38,16 @@ const IndexPage = () => {
           로그인
         </Button>
         <Flex justifyContent="center" gap={10}>
-          <Text>아이디/비밀번호 찾기</Text>
-          <Text>회원가입</Text>
+          <Text cursor="pointer" onClick={() => navigate('/login/find')}>
+            아이디/비밀번호 찾기
+          </Text>
+          <Text cursor="pointer" onClick={() => navigate('/login/signUp')}>
+            회원가입
+          </Text>
         </Flex>
       </Grid>
       <Text my="30px" color="gray" fontSize={12} textAlign="center">
-        Copyright © 2024 All rights reserved | This Site is made with by heejung/heemang/sun-ae
+        Copyright © 2024 All rights reserved | This Site is made with by heejung/heemang/sun-ae
       </Text>
     </S.Container>
   );
