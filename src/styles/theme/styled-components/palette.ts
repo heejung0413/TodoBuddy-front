@@ -24,7 +24,21 @@ const second = {
   900: '#004e86',
 };
 
+const category = {
+  1: '#FFCECE',
+  2: '#FFF7B7',
+  3: '#D0FFD9',
+};
+
+const HoverCategory = {
+  1: '#FF5A5A',
+  2: '#FFF28B',
+  3: '#3CFE60',
+};
+
 export const colors = {
   brand,
   second,
+  category,
+  HoverCategory,
 };

@@ -11,8 +11,18 @@ export const Container = styled.div`
     padding: 3% 5%;
     background-color: white;
   }
+  .react-calendar__navigation__label > span {
+    // 달력 상단 년/월 글씨 커스텀
+    color: var(--festie-gray-800, #3a3a3a);
+    font-size: 30px;
+
+    font-weight: 500;
+    line-height: 140%;
+  }
   .react-calendar__navigation {
     justify-content: space-around;
+    min-width: 100%;
+    margin: 0 auto;
     font-size: 30px;
   }
   .react-calendar__month-view__weekdays__weekday--weekend:nth-of-type(1) {

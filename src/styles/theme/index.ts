@@ -25,7 +25,6 @@ const styles = {
     '#root': {
       width: '100%',
       minHeight: '100vh',
-      background: 'gray.50',
     },
     main: {
       width: '100%',

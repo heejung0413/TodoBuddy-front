@@ -72,4 +72,14 @@ export const colors = {
   error: generateSameColorScale('#DC3545'),
   white: '#ffffff',
   black: '#000000',
+  HoverCategory: {
+    1: '#F97171',
+    2: '#FFEE6F',
+    3: '#3CFE60',
+  },
+  category: {
+    1: '#FFCECE',
+    2: '#FFF7B7',
+    3: '#D0FFD9',
+  },
 } as const;

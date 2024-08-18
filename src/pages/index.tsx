@@ -45,7 +45,7 @@ const IndexPage = () => {
           <Text>회원가입</Text>
         </Flex>
       </Grid>
-      <Text margin="30px auto" color="gray" fontSize={12}>
+      <Text my="30px" color="gray" fontSize={12} textAlign="center">
         Copyright © 2024 All rights reserved | This Site is made with by heejung/heemang/sun-ae
       </Text>
     </S.Container>
