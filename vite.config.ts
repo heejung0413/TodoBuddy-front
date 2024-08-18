@@ -14,5 +14,12 @@ export default defineConfig({
     https: true,
     port: 3000,
     open: true,
+    proxy: {
+      '/api': {
+        target: 'http://52.79.255.139:8080/',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });

@@ -15,7 +15,7 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { MdOutlineLink } from 'react-icons/md';
-
+import header from '@/../public/index/TodolistHeader.svg';
 import styled from 'styled-components';
 import SettingCategory from './SettingCategory';
 import SettingMemo from './SettingMemo';
@@ -28,7 +28,7 @@ const MemoList = () => {
       </Flex>
       <Card backgroundColor="brand.50" minW="100%" minH="80%">
         <CardHeader textAlign="center">
-          <Image src="/index/TodolistHeader.svg" margin="0 auto" />
+          <Image src={header} margin="0 auto" />
           <Heading size="md">TODO LIST</Heading>
         </CardHeader>
 
