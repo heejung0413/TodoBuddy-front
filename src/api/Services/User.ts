@@ -1,16 +1,9 @@
-import { typography } from '@chakra-ui/react';
-import {
-  PostCheckEmailRequest,
-  PostCheckEmailResponse,
-  PostSignUpRequest,
-  PostSignUpResponse,
-  UserClient,
-} from '../@types/User';
+import { UserClient } from '../@types/User';
 import { axiosInstance } from '../client';
 
 const ROUTE = '/users';
 
-export const CommentService: UserClient = {
+export const UserServices: UserClient = {
   postSignup: async request => {
     try {
       const response = await axiosInstance.post(`${ROUTE}`, request);

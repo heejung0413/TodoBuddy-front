@@ -1,8 +1,11 @@
 import axios from 'axios';
+import { logRequest } from './request';
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://localhost:3000/api', // NOTE: vite proxy
+  baseURL: 'http://localhost:3000/api',
   timeout: 4000,
   validateStatus: status => status >= 200 && status < 400,
   withCredentials: true,
 });
+
+axiosInstance.interceptors.request.use(logRequest);
