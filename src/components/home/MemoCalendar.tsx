@@ -1,16 +1,11 @@
 import moment from 'moment';
-import { useState } from 'react';
 import Calendar from 'react-calendar';
 import * as S from '@/styles/home/MemoCalendar.styles';
 
 const MemoCalendar = () => {
-  const today = new Date();
-  const [date, setDate] = useState<Date>(today);
-
   return (
     <S.Container>
       <Calendar
-        value={date}
         calendarType="gregory"
         formatDay={(locale, date) => moment(date).format('D')} // 일 제거 숫자만 보이게
         formatYear={(locale, date) => moment(date).format('YYYY')} // 네비게이션 눌렀을때 숫자 년도만 보이게

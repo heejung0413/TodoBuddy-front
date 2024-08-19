@@ -11,7 +11,6 @@ import {
   Text,
   Flex,
   Input,
-  Box,
 } from '@chakra-ui/react';
 import { IconStyle } from './MemoList';
 import { colors } from '@/styles/theme/styled-components/palette';

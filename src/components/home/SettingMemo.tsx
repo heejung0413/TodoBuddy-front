@@ -22,6 +22,7 @@ const SettingMemo = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [category, setCategory] = useState<String>('');
   const [deleteOpen, setDeleteOpen] = useState<Boolean>(false);
+  console.log(category);
 
   return (
     <>
