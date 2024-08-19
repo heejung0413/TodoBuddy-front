@@ -11,6 +11,7 @@ export default defineConfig({
     _global: {},
   },
   server: {
+    https: false,
     port: 3000,
     open: true,
     proxy: {

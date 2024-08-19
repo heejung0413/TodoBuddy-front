@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { logRequest } from './request';
 
 export const axiosInstance = axios.create({
-  baseURL: '/',
+  baseURL: 'http://52.79.255.139:8080/api',
   timeout: 4000,
   validateStatus: status => status >= 200 && status < 400,
   withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json', // Preflight 요청을 유발하는 헤더
+  },
 });
-
-axiosInstance.interceptors.request.use(logRequest);

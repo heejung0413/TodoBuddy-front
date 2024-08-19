@@ -2,7 +2,7 @@
 export interface PostSignUpRequest {
   email: string;
   password: string;
-  nickname: string;
+  nickName: string;
 }
 
 export interface PostSignUpResponse {
@@ -55,7 +55,7 @@ export interface PostLoginData {
 export interface GetUserResponse {
   code: number;
   message: string;
-  data;
+  data: UserData;
 }
 
 export interface UserData {

@@ -2,6 +2,7 @@ import * as S from '@/styles/layout/layout.styles';
 import { Flex, Image } from '@chakra-ui/react';
 
 const PageHeader = () => {
+  
   return (
     <S.Container>
       <Flex>
