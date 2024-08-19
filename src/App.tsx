@@ -41,11 +41,11 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ children }) => {
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <Layout />,
     children: [
       { index: true, element: <HomePage /> },
       {
         path: 'login',
-        element: <Layout />,
         children: [
           { index: true, element: <IndexPage /> },
           {
