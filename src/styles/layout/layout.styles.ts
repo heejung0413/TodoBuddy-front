@@ -15,4 +15,7 @@ export const LoginText = styled.p`
   font-size: 1rem;
   color: gray;
   margin: auto 0;
+  &:hover {
+    cursor: pointer;
+  }
 `;

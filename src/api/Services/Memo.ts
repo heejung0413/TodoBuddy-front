@@ -3,7 +3,7 @@ import { axiosInstance } from '../client';
 
 const ROUTE = '/memos';
 
-export const UserServices: MemoClient = {
+export const MemoServices: MemoClient = {
   get: async request => {
     try {
       const response = await axiosInstance.get(`${ROUTE}`, { params: request });

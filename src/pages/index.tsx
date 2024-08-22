@@ -5,18 +5,37 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '@/components/utils/Logo';
 import { UserServices } from '@/api/Services/User';
+import { useCustomToast } from '@/hooks/useCustomToast';
+import { AxiosError } from 'axios';
+import { useAuth } from '@/hooks/useAuth';
 
 const IndexPage = () => {
   const [show, setShow] = useState<Boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
+  const toast = useCustomToast();
+  const { setIsLoggedIn } = useAuth();
 
-  const handleSubmit = async () => {
+  const LoginHandleSubmit = async () => {
     try {
-      const result = await UserServices.postLogin({ email: email, password: password });
-      console.log(result);
-      navigate('/home');
+      await UserServices.login({ email: email, password: password });
+      navigate('/'); // 홈으로 리다이렉션
+      toast.success('로그인에 성공했습니다.');
+      setIsLoggedIn(true);
+    } catch (e) {
+      const error = e as AxiosError;
+      if (error.response && error.response.status === 400) {
+        toast.info('로그인 실패: 비밀번호가 틀렸습니다.');
+      } else {
+        toast.error('로그인 실패: 비밀번호가 틀렸습니다.');
+      }
+    }
+  };
+
+  const LogoutHandleSubmit = async () => {
+    try {
+      await UserServices.logout();
     } catch (e) {
       console.error(e);
     }
@@ -52,8 +71,11 @@ const IndexPage = () => {
             </InputGroup>
           </Flex>
         </VStack>
-        <Button margin="10px 0" colorScheme="brand" onClick={handleSubmit}>
+        <Button margin="10px 0" colorScheme="brand" onClick={LoginHandleSubmit}>
           로그인
+        </Button>
+        <Button margin="10px 0" colorScheme="brand" onClick={LogoutHandleSubmit}>
+          로그아웃
         </Button>
         <Flex justifyContent="center" gap={10}>
           <Text cursor="pointer" onClick={() => navigate('/login/find')}>

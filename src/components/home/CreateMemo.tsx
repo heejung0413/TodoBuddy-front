@@ -5,13 +5,26 @@ import { FaAngleDown } from 'react-icons/fa';
 import { TfiWrite } from 'react-icons/tfi';
 import { IconStyle } from './MemoList';
 import { colors } from '@/styles/theme/styled-components/palette';
+import { MemoServices } from '@/api/Services/Memo';
 
 interface Props {
   setOpen: Dispatch<SetStateAction<Boolean>>;
 }
 
 const CreateMemo: FC<Props> = ({ setOpen }) => {
-  const [category, setCategory] = useState<String>('카테고리');
+  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [value, setValue] = useState<string>('');
+
+  const handleSubmit = async () => {
+    try {
+      if (categoryId) {
+        const result = await MemoServices.post({ memoContent: value, categoryId: categoryId });
+        console.log(result);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
   return (
     <S.Container>
       <S.CategoryInputBox>
@@ -26,28 +39,28 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
             minW="max-content"
           >
             <Flex px="auto">
-              {category ?? '카테고리'} <FaAngleDown style={{ margin: 'auto 3px' }} />
+              {categoryId ?? '카테고리'} <FaAngleDown style={{ margin: 'auto 3px' }} />
             </Flex>
           </MenuButton>
           <MenuList margin="0 auto">
-            <MenuItem onClick={() => setCategory('운동')}>
+            <MenuItem onClick={() => setCategoryId(1)}>
               <IconStyle background-color={colors.category[1]} />
               운동
             </MenuItem>
-            <MenuItem onClick={() => setCategory('공부')}>
+            <MenuItem onClick={() => setCategoryId(2)}>
               <IconStyle background-color={colors.category[2]} />
               공부
             </MenuItem>
-            <MenuItem onClick={() => setCategory('토익')}>
+            <MenuItem onClick={() => setCategoryId(3)}>
               <IconStyle background-color={colors.category[3]} />
               토익
             </MenuItem>
           </MenuList>
         </Menu>
-        <Input bg="white"></Input>
+        <Input bg="white" value={value} onChange={e => setValue(e.target.value)}></Input>
       </S.CategoryInputBox>
       <Flex gap={3}>
-        <Button colorScheme="brand" minW="fit-content" flexGrow={{ base: '1', md: '0' }}>
+        <Button colorScheme="brand" minW="fit-content" flexGrow={{ base: '1', md: '0' }} onClick={handleSubmit}>
           메모하기
         </Button>
         <IconButton

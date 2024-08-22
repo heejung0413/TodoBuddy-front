@@ -48,7 +48,11 @@ export interface PostLoginResponse {
 }
 
 export interface PostLoginData {
-  accessToken: string;
+  jwtToken: {
+    accessToken: string;
+    refreshToken: string;
+    tokenType: string;
+  };
 }
 
 //사용자 정보 조회
@@ -92,12 +96,19 @@ export interface PatchChangePasswordResponse {
   data: Object;
 }
 
+export interface PostLogoutRequest {
+  headers: {
+    Authorization: string;
+  };
+}
+
 export interface UserClient {
   postSignup(request: PostSignUpRequest): Promise<PostSignUpResponse>;
   delete(): Promise<DeleteUserResponse>;
   postCheckEmail(request: PostCheckEmailRequest): Promise<PostCheckEmailResponse>;
-  postLogin(request: PostLoginRequest): Promise<PostLoginResponse>;
+  login(request: PostLoginRequest): Promise<PostLoginResponse>;
   get(): Promise<GetUserResponse>;
   postCheckEmailCode(request: PostChangePasswordCodeRequest): Promise<PostChangePasswordCodeResponse>;
   patchPassword(request: PatchChangePasswordRequest): Promise<PatchChangePasswordResponse>;
+  logout(): Promise<void>;
 }

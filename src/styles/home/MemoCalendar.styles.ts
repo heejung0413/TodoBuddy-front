@@ -5,10 +5,9 @@ import 'react-calendar/dist/Calendar.css';
 
 export const Container = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   position: relative;
-
+  margin-bottom: 100px;
   .react-calendar {
     box-shadow: 4px 2px 10px 0px rgba(0, 0, 0, 0.13);
     padding: 20px;

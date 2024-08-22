@@ -1,4 +1,4 @@
-import { UserClient } from '../@types/User';
+import { PostLogoutRequest, UserClient } from '../@types/User';
 import { axiosInstance } from '../client';
 
 const ROUTE = '/users';
@@ -28,9 +28,16 @@ export const UserServices: UserClient = {
       throw new Error(error as string);
     }
   },
-  postLogin: async request => {
+  login: async request => {
     try {
       const response = await axiosInstance.post(`${ROUTE}/login`, request);
+      const { refreshToken, accessToken } = response.data.data.jwtToken;
+      if (accessToken && refreshToken) {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+      } else {
+        console.error('Access token or refresh token is undefined');
+      }
       return response.data;
     } catch (error) {
       throw new Error(error as string);
@@ -56,6 +63,24 @@ export const UserServices: UserClient = {
     try {
       const response = await axiosInstance.patch(`${ROUTE}/password`, request);
       return response.data;
+    } catch (error) {
+      throw new Error(error as string);
+    }
+  },
+  logout: async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (accessToken) {
+        const request: PostLogoutRequest = {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+        const response = await axiosInstance.post(`${ROUTE}/logout`, null, request);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        return response.data;
+      }
     } catch (error) {
       throw new Error(error as string);
     }
