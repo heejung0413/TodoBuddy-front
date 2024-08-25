@@ -14,11 +14,41 @@ import {
 } from '@chakra-ui/react';
 import { IconStyle } from './MemoList';
 import { colors } from '@/styles/theme/styled-components/palette';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { CategoryServices } from '@/api/Services/Category';
+import { CategoryData } from '@/api/@types/Category';
 
 const SettingCategory = () => {
+  const array = [1, 2, 3];
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [deleteCategory, setDeleteCategory] = useState<Boolean>(false);
+  const [category, setCategory] = useState<CategoryData[]>([]);
+  const [deleteCategoryStates, setDeleteCategoryStates] = useState(
+    array.map(() => false), // 초기 상태는 모두 false로 설정
+  );
+  const fetchCategory = async () => {
+    try {
+      const data = await CategoryServices.get();
+      setCategory(data.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  useEffect(() => {
+    // 각 카테고리 ID에 대해 존재 여부를 확인하여 상태를 업데이트합니다.
+    const updatedStates = array.map(value => (category.some(item => item.categoryId === value) ? true : false));
+    setDeleteCategoryStates(updatedStates);
+  }, [category]);
+
+  const handleButtonClick = index => {
+    const newStates = [...deleteCategoryStates];
+    newStates[index] = !newStates[index]; // 해당 인덱스의 상태 토글
+    setDeleteCategoryStates(newStates);
+  };
 
   return (
     <>
@@ -37,47 +67,86 @@ const SettingCategory = () => {
 
           <ModalCloseButton />
           <ModalBody>
-            <Flex my={3}>
-              <IconStyle background-color={colors.category[1]} border-radius={10} style={{ width: '45px' }} />
-              {deleteCategory ? (
-                <Flex
-                  width="100%"
-                  backgroundColor="gray.100"
-                  borderRadius={10}
-                  alignItems="center"
-                  pl={5}
-                  color="gray.900"
-                >
-                  해당 카테고리 없음
-                </Flex>
-              ) : (
-                <Input flexShrink={1} />
-              )}
+            {array.map((value, index) => {
+              const isDeleted = deleteCategoryStates[index];
+              return (
+                <Flex my={3}>
+                  <IconStyle backgroundColor={colors.category[index]} borderRadius={10} style={{ width: '45px' }} />
+                  {isDeleted ? (
+                    <>
+                      <Input flexShrink={1} key={index} />
+                    </>
+                  ) : (
+                    <Flex
+                      width="100%"
+                      backgroundColor="gray.100"
+                      borderRadius={10}
+                      alignItems="center"
+                      pl={5}
+                      color="gray.900"
+                    >
+                      해당 카테고리 없음
+                    </Flex>
+                  )}
 
-              {deleteCategory ? (
-                <Button colorScheme="red" variant="outline" mx={3} onClick={() => setDeleteCategory(false)} px={5}>
-                  지우기 취소
-                </Button>
-              ) : (
-                <Button colorScheme="red" opacity={10} mx={3} onClick={() => setDeleteCategory(true)}>
-                  지우기
-                </Button>
-              )}
-            </Flex>
-            <Flex my={3}>
-              <IconStyle background-color={colors.category[2]} border-radius={10} style={{ width: '45px' }} />
-              <Input flexShrink={1} />
-              <Button colorScheme="red" opacity={10} mx={3}>
-                지우기
-              </Button>
-            </Flex>
-            <Flex my={3}>
-              <IconStyle background-color={colors.category[3]} border-radius={10} style={{ width: '45px' }} />
-              <Input flexShrink={1} />
-              <Button colorScheme="red" opacity={10} mx={3}>
-                지우기
-              </Button>
-            </Flex>
+                  <Button colorScheme="red" mx={3} onClick={() => handleButtonClick(index)}>
+                    {isDeleted ? '지우기' : '지우기 취소'}
+                  </Button>
+                </Flex>
+                // <Flex my={3}>
+                //   <IconStyle
+                //     background-color={colors.category[value]}
+                //     border-radius={10}
+                //     style={{ width: '45px', height: '45px' }}
+                //   />
+                //   {/* {deleteCategory ? (
+                //     <DeleteCategoryItem />
+                //   ) : (
+                //     <>
+                //       <Input />
+                //       <Button>지우기 취소</Button>
+                //     </>
+                //   )} */}
+                //   {/* {deleteCategory ? (
+                //     <DeleteCategoryItem />
+                //   ) : (
+                //     <Flex
+                //       width="100%"
+                //       backgroundColor="gray.100"
+                //       borderRadius={10}
+                //       alignItems="center"
+                //       pl={5}
+                //       color="gray.900"
+                //     >
+                //       해당 카테고리 없음
+                //     </Flex>
+                //   )}
+
+                //   {categoryItem ? (
+                //     <Button
+                //       colorScheme="red"
+                //       opacity={10}
+                //       mx={3}
+                //       onClick={() => {
+                //         setDeleteCategory(prev => !prev), console.log(deleteCategory);
+                //       }}
+                //     >
+                //       {deleteCategory ? '지우기' : '지우기 취소'}
+                //     </Button>
+                //   ) : (
+                //     <Button
+                //       colorScheme="red"
+                //       variant="outline"
+                //       mx={3}
+                //       px={5}
+                //       onClick={() => {
+                //         setDeleteCategory(prev => !prev), console.log(deleteCategory);
+                //       }}
+                //     ></Button>
+                //   )} */}
+                // </Flex>
+              );
+            })}
           </ModalBody>
 
           <ModalFooter>

@@ -1,30 +1,56 @@
 import * as S from '@/styles/home/CreateMemo.styles';
 import { Menu, MenuButton, MenuList, MenuItem, Button, Flex, Input, IconButton } from '@chakra-ui/react';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { FaAngleDown } from 'react-icons/fa';
 import { TfiWrite } from 'react-icons/tfi';
 import { IconStyle } from './MemoList';
 import { colors } from '@/styles/theme/styled-components/palette';
 import { MemoServices } from '@/api/Services/Memo';
+import { CategoryServices } from '@/api/Services/Category';
+import { CategoryData } from '@/api/@types/Category';
+import { useCustomToast } from '@/hooks/useCustomToast';
 
 interface Props {
   setOpen: Dispatch<SetStateAction<Boolean>>;
 }
 
 const CreateMemo: FC<Props> = ({ setOpen }) => {
-  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [category, setCategory] = useState<CategoryData[]>([]);
   const [value, setValue] = useState<string>('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null); // 선택된 카테고리 ID 상태
+  const [selectedCategoryName, setSelectedCategoryName] = useState(''); // 선택된 카테고리 이름 상태
+  const toast = useCustomToast();
+
+  const handleCategoryClick = (categoryId, categoryName) => {
+    setSelectedCategoryId(categoryId);
+    setSelectedCategoryName(categoryName); // 선택된 카테고리 이름 업데이트
+  };
+
+  const fetchCategory = async () => {
+    try {
+      const data = await CategoryServices.get();
+      setCategory(data.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
-      if (categoryId) {
-        const result = await MemoServices.post({ memoContent: value, categoryId: categoryId });
+      if (selectedCategoryId) {
+        const result = await MemoServices.post({ memoContent: value, categoryId: selectedCategoryId });
         console.log(result);
+      } else {
+        toast.info('설정된 카테고리가 없습니다. 카테고리 설정 먼저 해주세요.');
       }
     } catch (e) {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
   return (
     <S.Container>
       <S.CategoryInputBox>
@@ -39,22 +65,25 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
             minW="max-content"
           >
             <Flex px="auto">
-              {categoryId ?? '카테고리'} <FaAngleDown style={{ margin: 'auto 3px' }} />
+              {selectedCategoryName === '' ? '카테고리' : selectedCategoryName}
+              <FaAngleDown style={{ margin: 'auto 3px' }} />
             </Flex>
           </MenuButton>
           <MenuList margin="0 auto">
-            <MenuItem onClick={() => setCategoryId(1)}>
-              <IconStyle background-color={colors.category[1]} />
-              운동
-            </MenuItem>
-            <MenuItem onClick={() => setCategoryId(2)}>
-              <IconStyle background-color={colors.category[2]} />
-              공부
-            </MenuItem>
-            <MenuItem onClick={() => setCategoryId(3)}>
-              <IconStyle background-color={colors.category[3]} />
-              토익
-            </MenuItem>
+            {category.length > 0 ? (
+              category.map(value => (
+                <MenuItem
+                  key={value.categoryId}
+                  value={value.categoryId}
+                  onClick={() => handleCategoryClick(value.categoryId, value.categoryName)}
+                >
+                  <IconStyle backgroundColor={colors.category[value.categoryId]} />
+                  {value.categoryName}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem>카테고리 없음</MenuItem>
+            )}
           </MenuList>
         </Menu>
         <Input bg="white" value={value} onChange={e => setValue(e.target.value)}></Input>

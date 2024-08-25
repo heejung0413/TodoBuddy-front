@@ -26,28 +26,34 @@ axiosInstance.interceptors.request.use(async config => {
   }
 });
 
-// axiosInstance.interceptors.response.use(
-//   response => {
-//     return response;
-//   },
-//   async error => {
-//     const originalRequest = error.config;
+axiosInstance.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async error => {
+    const originalRequest = error.config;
 
-//     if (error.response.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-//       try {
-//         const result = await AuthService.post();
-//         originalRequest.headers.Authorization = `Bearer ${result.data.accessToken}`;
-
-//         const { accessToken } = result.data;
-//         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-
-//         return axiosInstance(originalRequest);
-//       } catch (e) {
-//         return e;
-//       }
-//     }
-//     return Promise.reject(error);
-//   },
-// );
+      try {
+        // const accessToken = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (refreshToken) {
+          const newAccessToken = await AuthService.post();
+          if (newAccessToken) {
+            // 새로 발급된 액세스 토큰을 헤더에 추가
+            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            return axiosInstance(originalRequest); // 원래의 요청을 다시 시도
+          }
+        }
+      } catch (e: any) {
+        if (e.response.data === 401) {
+          console.log('eeeee');
+          return Promise.reject(e);
+        }
+      }
+    }
+    return Promise.reject(error);
+  },
+);

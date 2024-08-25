@@ -31,10 +31,11 @@ export const UserServices: UserClient = {
   login: async request => {
     try {
       const response = await axiosInstance.post(`${ROUTE}/login`, request);
-      const { refreshToken, accessToken } = response.data.data.jwtToken;
+      const { refreshToken, accessToken, refreshTokenExpiredDate } = response.data.data.jwtToken;
       if (accessToken && refreshToken) {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('refreshTokenExpiredDate', refreshTokenExpiredDate);
       } else {
         console.error('Access token or refresh token is undefined');
       }
@@ -45,7 +46,7 @@ export const UserServices: UserClient = {
   },
   get: async () => {
     try {
-      const response = await axiosInstance.post(`${ROUTE}/me`);
+      const response = await axiosInstance.get(`${ROUTE}/me`);
       return response.data;
     } catch (error) {
       throw new Error(error as string);

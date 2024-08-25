@@ -13,10 +13,11 @@ export const AuthService: AuthClient = {
         },
       };
       const response = await axiosInstance.post(`${ROUTE}/reissue`, null, request);
-      localStorage.setItem('accessToken', response.data.data.accessToken);
-      return response.data;
+      const accessToken = response.data.data.accessToken;
+      localStorage.setItem('accessToken', accessToken);
+      return accessToken;
     } catch (error) {
-      throw new Error(error as string);
+      throw error;
     }
   },
 };
