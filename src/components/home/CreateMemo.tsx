@@ -77,7 +77,7 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
                   value={value.categoryId}
                   onClick={() => handleCategoryClick(value.categoryId, value.categoryName)}
                 >
-                  <IconStyle backgroundColor={colors.category[value.categoryId]} />
+                  <IconStyle background-color={colors.category[value.categoryId]} />
                   {value.categoryName}
                 </MenuItem>
               ))
