@@ -43,7 +43,14 @@ const router = createBrowserRouter([
     path: '/',
     element: <Layout />,
     children: [
-      { index: true, element: <HomePage /> },
+      {
+        index: true,
+        element: (
+          <PrivateRoute>
+            <HomePage />
+          </PrivateRoute>
+        ),
+      },
       {
         path: 'login',
         children: [
@@ -62,12 +69,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/home',
-
-    element: (
-      <PrivateRoute>
-        <HomePage />
-      </PrivateRoute>
-    ),
+    element: <HomePage />,
   },
 ]);
 

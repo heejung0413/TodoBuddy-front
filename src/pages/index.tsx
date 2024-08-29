@@ -15,9 +15,11 @@ const IndexPage = () => {
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
   const toast = useCustomToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setIsLoggedIn } = useAuth();
 
   const LoginHandleSubmit = async () => {
+    setIsLoading(true);
     try {
       await UserServices.login({ email: email, password: password });
       navigate('/'); // 홈으로 리다이렉션
@@ -30,6 +32,8 @@ const IndexPage = () => {
       } else {
         toast.error('로그인 실패: 비밀번호가 틀렸습니다.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -38,6 +42,12 @@ const IndexPage = () => {
       await UserServices.logout();
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      LoginHandleSubmit();
     }
   };
 
@@ -62,6 +72,7 @@ const IndexPage = () => {
                 type={show ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
@@ -71,11 +82,11 @@ const IndexPage = () => {
             </InputGroup>
           </Flex>
         </VStack>
-        <Button margin="10px 0" colorScheme="brand" onClick={LoginHandleSubmit}>
+        <Button margin="10px 0" colorScheme="brand" onClick={LoginHandleSubmit} isLoading={isLoading}>
           로그인
         </Button>
         <Button margin="10px 0" colorScheme="brand" onClick={LogoutHandleSubmit}>
-          로그아웃
+          (임시)로그아웃
         </Button>
         <Flex justifyContent="center" gap={10}>
           <Text cursor="pointer" onClick={() => navigate('/login/find')}>

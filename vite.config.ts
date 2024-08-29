@@ -16,7 +16,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://52.79.255.139:8080/',
+        target: 'https://www.todobuddy.site',
         changeOrigin: true,
         secure: false,
       },

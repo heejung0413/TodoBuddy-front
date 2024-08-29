@@ -1,5 +1,6 @@
 import { PostLogoutRequest, UserClient } from '../@types/User';
 import { axiosInstance } from '../client';
+import { AuthService } from './Auth';
 
 const ROUTE = '/users';
 
@@ -24,8 +25,12 @@ export const UserServices: UserClient = {
     try {
       const response = await axiosInstance.post(`${ROUTE}/check-email`, request);
       return response.data;
-    } catch (error) {
-      throw new Error(error as string);
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        throw new Error('해당 이메일을 찾을 수 없습니다.');
+      } else {
+        throw new Error('요청 실패: 서버와의 통신 중 문제가 발생했습니다.');
+      }
     }
   },
   login: async request => {
@@ -48,8 +53,12 @@ export const UserServices: UserClient = {
     try {
       const response = await axiosInstance.get(`${ROUTE}/me`);
       return response.data;
-    } catch (error) {
-      throw new Error(error as string);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await AuthService.post();
+      } else {
+        throw new Error(error as string);
+      }
     }
   },
   postCheckEmailCode: async request => {

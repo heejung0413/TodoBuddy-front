@@ -17,6 +17,7 @@ interface Props {
 const CreateMemo: FC<Props> = ({ setOpen }) => {
   const [category, setCategory] = useState<CategoryData[]>([]);
   const [value, setValue] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null); // 선택된 카테고리 ID 상태
   const [selectedCategoryName, setSelectedCategoryName] = useState(''); // 선택된 카테고리 이름 상태
   const toast = useCustomToast();
@@ -36,15 +37,23 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     try {
       if (selectedCategoryId) {
-        const result = await MemoServices.post({ memoContent: value, categoryId: selectedCategoryId });
-        console.log(result);
+        if (value.trim() !== '') {
+          const result = await MemoServices.post({ memoContent: value, categoryId: selectedCategoryId });
+          console.log(result);
+          setValue('');
+        } else {
+          toast.info('메모 내용을 입력해주세요.');
+        }
       } else {
-        toast.info('설정된 카테고리가 없습니다. 카테고리 설정 먼저 해주세요.');
+        toast.info('카테고리를 설정해주세요.');
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,7 +86,7 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
                   value={value.categoryId}
                   onClick={() => handleCategoryClick(value.categoryId, value.categoryName)}
                 >
-                  <IconStyle background-color={colors.category[value.categoryId]} />
+                  <IconStyle background-color={colors.category[value.categoryOrderId]} />
                   {value.categoryName}
                 </MenuItem>
               ))

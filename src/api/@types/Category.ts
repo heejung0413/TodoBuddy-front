@@ -7,11 +7,12 @@ export interface CategoryResponse {
 export interface CategoryData {
   categoryId: number;
   categoryName: string;
+  categoryOrderId: number;
 }
 
 export interface PostCategoryRequest {
   categoryName: string;
-  categoryId: number;
+  categoryOrderId: number;
 }
 
 export interface DeleteCategoryRequest {

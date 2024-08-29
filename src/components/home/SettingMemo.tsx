@@ -2,8 +2,10 @@ import { LuFileText } from 'react-icons/lu';
 import { IconStyle } from './MemoList';
 import { colors } from '@/styles/theme/styled-components/palette';
 import {
+  Box,
   Button,
   Flex,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -12,17 +14,78 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  RadioGroup,
   Stack,
   useDisclosure,
+  useRadio,
+  useRadioGroup,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { FC, useState } from 'react';
+import { MemoData } from '@/api/@types/Memo';
+import { CategoryData } from '@/api/@types/Category';
+import { MemoServices } from '@/api/Services/Memo';
 
-const SettingMemo = () => {
+interface Props {
+  memo: MemoData;
+  category: CategoryData[];
+}
+
+const SettingMemo: FC<Props> = ({ memo, category }) => {
+  const today = new Date();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [category, setCategory] = useState<String>('');
-  const [deleteOpen, setDeleteOpen] = useState<Boolean>(false);
-  console.log(category);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const [deadLine, setDeadLine] = useState<string>(today.toDateString());
+  const [link, setLink] = useState<string>('');
+  const options = category.map(value => value.categoryName);
+  const number = category.map(value => value.categoryOrderId);
+
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name: 'framework',
+    defaultValue: 'react',
+    onChange: console.log,
+  });
+
+  const group = getRootProps();
+
+  // const handleSubmit = async () => {
+  //   try{
+  //     await MemoServices.patchMemo({memoId: memo.memoId, memoDeadLine: })
+  //   }
+  // }
+
+  function RadioCard(props) {
+    const { getInputProps, getRadioProps } = useRadio(props);
+
+    const input = getInputProps();
+    const checkbox = getRadioProps();
+
+    return (
+      <Box as="label">
+        <input {...input} />
+        <Box
+          {...checkbox}
+          cursor="pointer"
+          borderWidth="1px"
+          borderRadius="md"
+          boxShadow="md"
+          _checked={{
+            bg: `HoverCategory.1`,
+            color: 'white',
+            borderColor: 'teal.600',
+          }}
+          _focus={{
+            boxShadow: 'outline',
+          }}
+          px={5}
+          py={3}
+        >
+          {props.children}
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -38,43 +101,57 @@ const SettingMemo = () => {
             <Stack>
               <Flex>
                 <SettingMemoTitle>일정</SettingMemoTitle>
-                <Input placeholder="Select Date and Time" size="md" type="datetime-local" />
+                <Input
+                  placeholder="Select Date and Time"
+                  size="md"
+                  type="datetime-local"
+                  defaultValue={memo.memoDeadline ?? deadLine}
+                  onChange={() => {
+                    setDeadLine(deadLine), console.log(deadLine);
+                  }}
+                />
               </Flex>
               <Flex>
                 <SettingMemoTitle>내용 수정하기</SettingMemoTitle>
-                <Input placeholder="원래 메모 내용" />
+                <Input placeholder={memo.memoContent} defaultValue={memo.memoContent} />
               </Flex>
               <Flex>
                 <SettingMemoTitle>링크 추가하기</SettingMemoTitle>
-                <Input />
+                <Input
+                  placeholder={memo.memoLink ?? '링크 정보 없음'}
+                  defaultValue={memo.memoLink}
+                  value={link}
+                  onChange={() => setLink(link)}
+                />
               </Flex>
               <Flex>
                 <SettingMemoTitle>카테고리 분류</SettingMemoTitle>
                 <Flex>
-                  <SettingMemoCategory
-                    background-color={colors.category[1]}
-                    hover-background-color={colors.HoverCategory[1]}
-                    value="토익"
-                    onClick={() => setCategory('토익')}
-                  >
-                    토익
-                  </SettingMemoCategory>
-                  <SettingMemoCategory
-                    background-color={colors.category[2]}
-                    hover-background-color={colors.HoverCategory[2]}
-                    value="운동"
-                    onClick={() => setCategory('운동')}
-                  >
-                    운동
-                  </SettingMemoCategory>
-                  <SettingMemoCategory
-                    background-color={colors.category[3]}
-                    hover-background-color={colors.HoverCategory[3]}
-                    value="공부"
-                    onClick={() => setCategory('공부')}
-                  >
-                    공부
-                  </SettingMemoCategory>
+                  {/* {category.map(item => (
+                    <RadioGroup defaultValue="2">
+                      <Stack spacing={5} direction="row">
+                        <Radio colorScheme="red" value="1">
+                          <SettingMemoCategory
+                            background-color={colors.category[item.categoryOrderId]}
+                            hover-background-color={colors.HoverCategory[item.categoryOrderId]}
+                            value="토익"
+                          >
+                            {item.categoryName}
+                          </SettingMemoCategory>
+                        </Radio>
+                      </Stack>
+                    </RadioGroup>
+                  ))} */}
+                  <HStack {...group}>
+                    {options.map(value => {
+                      const radio = getRadioProps({ value });
+                      return (
+                        <RadioCard key={value} {...radio}>
+                          {value}
+                        </RadioCard>
+                      );
+                    })}
+                  </HStack>
                 </Flex>
               </Flex>
             </Stack>

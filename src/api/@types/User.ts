@@ -80,7 +80,7 @@ export interface PostChangePasswordCodeResponse {
 }
 
 export interface ChangePasswordData {
-  verifyCode: string;
+  verifyCode: string | number;
 }
 
 export interface PatchChangePasswordRequest {

@@ -29,6 +29,7 @@ const predefinedRegex = {
   licenseNumber: /([0-9]{3})-?([0-9]{2})-?([0-9]{5})/,
   account: /^[0-9-]+$/,
   korEngNumSpace: /^[ㄱ-ㅎ가-힣a-zA-Z0-9 ]+$/,
+  code: /^\d*$/,
 };
 
 /**

@@ -1,7 +1,7 @@
 import { TStatus } from './@asConst';
 
 export interface GetMemoRequest {
-  memoStatus: keyof TStatus;
+  memoStatus?: keyof TStatus;
 }
 
 export interface GetMemoResponse {
@@ -12,6 +12,8 @@ export interface GetMemoResponse {
 
 export interface MemoData {
   categoryId: number;
+  categoryOrderId: number;
+  memoId: number;
   memoContent: string;
   memoLink: string;
   memoDeadline: string;

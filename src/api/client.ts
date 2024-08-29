@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { AuthService } from './Services/Auth';
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://52.79.255.139:8080/api',
+  baseURL: 'https://www.todobuddy.site/api',
   timeout: 4000,
   validateStatus: status => status >= 200 && status < 400,
   withCredentials: true,
@@ -26,6 +27,7 @@ axiosInstance.interceptors.request.use(async config => {
   }
 });
 
+let isLoggingOut = false;
 axiosInstance.interceptors.response.use(
   response => {
     return response;
@@ -35,25 +37,26 @@ axiosInstance.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      if (!isLoggingOut) {
+        isLoggingOut = true;
 
-      try {
-        // const accessToken = localStorage.getItem('accessToken');
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken) {
-          const newAccessToken = await AuthService.post();
-          if (newAccessToken) {
-            // 새로 발급된 액세스 토큰을 헤더에 추가
-            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-            return axiosInstance(originalRequest); // 원래의 요청을 다시 시도
+        try {
+          const newToken = await AuthService.post();
+          if (newToken) {
+            originalRequest.headers.Authorization = `Bearer ${newToken.data.accessToken}`;
+            isLoggingOut = false;
+            return axiosInstance(originalRequest);
           }
-        }
-      } catch (e: any) {
-        if (e.response.data === 401) {
-          console.log('eeeee');
-          return Promise.reject(e);
+        } catch (e: any) {
+          if (e.response?.status === 401) {
+            return Promise.reject(e);
+          }
+        } finally {
+          isLoggingOut = false;
         }
       }
     }
+
     return Promise.reject(error);
   },
 );
