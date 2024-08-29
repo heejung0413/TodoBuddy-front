@@ -1,4 +1,3 @@
-import { colors } from '@/styles/theme/styled-components/palette';
 import {
   Card,
   CardBody,
@@ -9,12 +8,10 @@ import {
   Badge,
   Checkbox,
   Box,
-  Divider,
   Text,
   IconProps,
   HStack,
 } from '@chakra-ui/react';
-import { MdOutlineLink } from 'react-icons/md';
 import header from '@/../public/index/TodolistHeader.svg';
 import styled from 'styled-components';
 import SettingCategory from './SettingCategory';
@@ -27,7 +24,6 @@ import { MemoData } from '@/api/@types/Memo';
 
 const MemoList = () => {
   const [category, setCategory] = useState<CategoryData[]>([]);
-  const [status, setStatus] = useState<string | null>(null);
   const [memo, setMemo] = useState<MemoData[]>([]);
   const fetchCategory = async () => {
     try {

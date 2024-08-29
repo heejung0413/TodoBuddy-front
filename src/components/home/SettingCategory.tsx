@@ -41,7 +41,7 @@ const SettingCategory = () => {
   const handleSubmit = async (value: number) => {
     setIsLoading(true);
     try {
-      await CategoryServices.post({ categoryId: value, categoryName: input });
+      console.log('dd');
     } catch (e) {
       console.error(e);
     } finally {

@@ -17,7 +17,7 @@ interface Props {
 const CreateMemo: FC<Props> = ({ setOpen }) => {
   const [category, setCategory] = useState<CategoryData[]>([]);
   const [value, setValue] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [_, setIsLoading] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null); // 선택된 카테고리 ID 상태
   const [selectedCategoryName, setSelectedCategoryName] = useState(''); // 선택된 카테고리 이름 상태
   const toast = useCustomToast();

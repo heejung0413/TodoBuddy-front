@@ -2,10 +2,8 @@ import { LuFileText } from 'react-icons/lu';
 import { IconStyle } from './MemoList';
 import { colors } from '@/styles/theme/styled-components/palette';
 import {
-  Box,
   Button,
   Flex,
-  HStack,
   Input,
   Modal,
   ModalBody,
@@ -14,14 +12,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
   useDisclosure,
-  useRadioGroup,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { FC, useState } from 'react';
 import { MemoData } from '@/api/@types/Memo';
 import { CategoryData } from '@/api/@types/Category';
-import { MemoServices } from '@/api/Services/Memo';
 
 interface Props {
   memo: MemoData;
@@ -34,16 +31,8 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [deadLine, setDeadLine] = useState<string>(today.toDateString());
   const [link, setLink] = useState<string>('');
-  const options = category.map(value => value.categoryName);
-  const number = category.map(value => value.categoryOrderId);
-
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'framework',
-    defaultValue: 'react',
-    onChange: console.log,
-  });
-
-  const group = getRootProps();
+  // const options = category.map(value => value.categoryName);
+  // const number = category.map(value => value.categoryOrderId);
 
   // const handleSubmit = async () => {
   //   try{

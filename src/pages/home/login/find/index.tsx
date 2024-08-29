@@ -1,7 +1,7 @@
 import Logo from '@/components/utils/Logo';
 import { Button, Card, Heading, HStack, Input, InputGroup, InputRightElement, Stack, Text } from '@chakra-ui/react';
 import { Container } from '../signUp';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { UserServices } from '@/api/Services/User';
 import { useCustomToast } from '@/hooks/useCustomToast';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
