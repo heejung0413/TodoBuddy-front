@@ -14,11 +14,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
-  Stack,
   useDisclosure,
-  useRadio,
   useRadioGroup,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
@@ -55,37 +51,37 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
   //   }
   // }
 
-  function RadioCard(props) {
-    const { getInputProps, getRadioProps } = useRadio(props);
+  // function RadioCard(props) {
+  //   const { getInputProps, getRadioProps } = useRadio(props);
 
-    const input = getInputProps();
-    const checkbox = getRadioProps();
+  //   const input = getInputProps();
+  //   const checkbox = getRadioProps();
 
-    return (
-      <Box as="label">
-        <input {...input} />
-        <Box
-          {...checkbox}
-          cursor="pointer"
-          borderWidth="1px"
-          borderRadius="md"
-          boxShadow="md"
-          _checked={{
-            bg: `HoverCategory.1`,
-            color: 'white',
-            borderColor: 'teal.600',
-          }}
-          _focus={{
-            boxShadow: 'outline',
-          }}
-          px={5}
-          py={3}
-        >
-          {props.children}
-        </Box>
-      </Box>
-    );
-  }
+  //   return (
+  //     <Box as="label">
+  //       <input {...input} />
+  //       <Box
+  //         {...checkbox}
+  //         cursor="pointer"
+  //         borderWidth="1px"
+  //         borderRadius="md"
+  //         boxShadow="md"
+  //         _checked={{
+  //           bg: `HoverCategory.1`,
+  //           color: 'white',
+  //           borderColor: 'teal.600',
+  //         }}
+  //         _focus={{
+  //           boxShadow: 'outline',
+  //         }}
+  //         px={5}
+  //         py={3}
+  //       >
+  //         {props.children}
+  //       </Box>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <>
@@ -142,16 +138,6 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
                       </Stack>
                     </RadioGroup>
                   ))} */}
-                  <HStack {...group}>
-                    {options.map(value => {
-                      const radio = getRadioProps({ value });
-                      return (
-                        <RadioCard key={value} {...radio}>
-                          {value}
-                        </RadioCard>
-                      );
-                    })}
-                  </HStack>
                 </Flex>
               </Flex>
             </Stack>

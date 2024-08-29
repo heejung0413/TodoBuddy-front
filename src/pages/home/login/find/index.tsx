@@ -115,11 +115,6 @@ const LoginFindPage = () => {
     }
   };
 
-  const handleCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    return parseInt(inputValue, 10);
-  };
-
   return (
     <Container>
       <Logo />
