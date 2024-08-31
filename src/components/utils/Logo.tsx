@@ -9,6 +9,7 @@ const Logo = () => {
       onClick={() => {
         navigate('/');
       }}
+      minW="max-content"
     >
       <Image src="/Logo.svg" width={200} margin="0 auto" />
       <Text color="brand.900">메모장과 친구가 되어보세요!</Text>

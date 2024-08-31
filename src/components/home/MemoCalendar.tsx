@@ -67,9 +67,6 @@ const MemoCalendar = () => {
         }
       });
 
-  console.log('attendDay', attendDay);
-  console.log('attendDay1', attendDay1);
-
   const handleDateChange = newDate => {
     setDate(newDate);
   };
@@ -87,8 +84,8 @@ const MemoCalendar = () => {
 
   return (
     <S.Container>
-      <Button onClick={handleTodayClick} colorScheme="brand" width="fit-content" mb={5}>
-        <GrPowerReset />
+      <Button onClick={handleTodayClick} colorScheme="brand" width="fit-content" mb={5} mx="auto" gap={3}>
+        <GrPowerReset /> 오늘로 돌아가기
       </Button>
       <S.StyledCalendar
         value={todayReset ? today : date}

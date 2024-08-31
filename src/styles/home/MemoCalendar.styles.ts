@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 
 export const Container = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   position: relative;
   margin-bottom: 100px;
@@ -92,7 +93,6 @@ export const StyledToday = styled.div`
   font-size: x-small;
   color: red;
   font-weight: 600;
-  margin: 10px;
 `;
 
 export const StyledDot = styled.div`

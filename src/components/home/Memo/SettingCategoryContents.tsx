@@ -5,6 +5,7 @@ import { FC, useState } from 'react';
 import { CategoryData } from '@/api/@types/Category';
 import { CategoryServices } from '@/api/Services/Category';
 import { useCustomToast } from '@/hooks/useCustomToast';
+import { useRenderStore } from '@/stores/render';
 
 interface Props {
   categoryOrderId: number;
@@ -28,18 +29,18 @@ const SettingCategoryContents: FC<Props> = ({ categoryOrderId, category, onClose
 
   const [input, setInput] = useState<string>(value(categoryOrderId));
   const [createInput, setCreateInput] = useState<string>('');
-  const [result, setResult] = useState<CategoryData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [isCreated, setIsCreated] = useState<boolean>(false);
+  const { render, setRender } = useRenderStore();
   const toast = useCustomToast();
 
   const handlePatchSubmit = async () => {
     setIsLoading(true);
     try {
-      const data = await CategoryServices.patch({ categoryId: categoryId(categoryOrderId), categoryName: input });
-      setResult(data.data);
+      await CategoryServices.patch({ categoryId: categoryId(categoryOrderId), categoryName: input });
       toast.success('해당 카테고리 이름이 수정되었습니다.');
+      setRender(!render);
       onClose();
     } catch (e) {
       console.error(e);
@@ -54,6 +55,8 @@ const SettingCategoryContents: FC<Props> = ({ categoryOrderId, category, onClose
       await CategoryServices.delete({ categoryId: categoryId(categoryOrderId) });
       toast.info('해당 카테고리가 삭제되었습니다.');
       setIsDeleted(false);
+      setRender(!render);
+
       onClose();
     } catch (e) {
       console.error(e);
@@ -69,6 +72,8 @@ const SettingCategoryContents: FC<Props> = ({ categoryOrderId, category, onClose
       if (createInput !== '') {
         await CategoryServices.post({ categoryOrderId: categoryOrderId, categoryName: createInput });
         toast.success('카테고리를 생성하였습니다.');
+        setRender(!render);
+
         onClose();
       } else {
         toast.info('내용을 입력하세요.');
@@ -107,7 +112,7 @@ const SettingCategoryContents: FC<Props> = ({ categoryOrderId, category, onClose
               저장
             </Button>
           </Flex>
-          {isDeleted ? (
+          {isDeleted && (
             <Flex>
               <Card>
                 <CardBody display="flex" gap={3} mt={5}>
@@ -124,7 +129,7 @@ const SettingCategoryContents: FC<Props> = ({ categoryOrderId, category, onClose
                 </CardBody>
               </Card>
             </Flex>
-          ) : null}
+          )}
         </Box>
       ) : (
         <VStack>

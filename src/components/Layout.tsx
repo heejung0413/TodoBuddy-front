@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import PageHeader from './layout/PageHeader';
 import { FC } from 'react';
+import PageAside from './layout/PageAside';
 
 const Layout: FC = () => {
   return (
@@ -9,6 +10,7 @@ const Layout: FC = () => {
       <main>
         <Outlet />
       </main>
+      <PageAside />
     </>
   );
 };

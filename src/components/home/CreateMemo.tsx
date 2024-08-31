@@ -9,6 +9,7 @@ import { MemoServices } from '@/api/Services/Memo';
 import { CategoryServices } from '@/api/Services/Category';
 import { CategoryData } from '@/api/@types/Category';
 import { useCustomToast } from '@/hooks/useCustomToast';
+import { useRenderStore } from '@/stores/render';
 
 interface Props {
   setOpen: Dispatch<SetStateAction<Boolean>>;
@@ -21,6 +22,7 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null); // 선택된 카테고리 ID 상태
   const [selectedCategoryName, setSelectedCategoryName] = useState(''); // 선택된 카테고리 이름 상태
   const toast = useCustomToast();
+  const { render, setRender } = useRenderStore();
 
   const handleCategoryClick = (categoryId, categoryName) => {
     setSelectedCategoryId(categoryId);
@@ -44,6 +46,7 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
           await MemoServices.post({ memoContent: value, categoryId: selectedCategoryId });
           setValue('');
           toast.success('메모가 생성되었습니다.');
+          setRender(!render);
         } else {
           toast.info('메모 내용을 입력해주세요.');
         }

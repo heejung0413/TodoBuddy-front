@@ -81,8 +81,12 @@ export const UserServices: UserClient = {
     try {
       const response = await axiosInstance.patch(`${ROUTE}/password`, request);
       return response.data;
-    } catch (error) {
-      throw new Error(error as string);
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        throw new Error('인증번호가 올바르지 않습니다.');
+      } else {
+        throw new Error(error as string);
+      }
     }
   },
   logout: async () => {

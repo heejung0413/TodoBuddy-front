@@ -71,5 +71,5 @@ const SignUpPage = () => {
 export default SignUpPage;
 
 export const Container = styled.div`
-  margin: 100px;
+  margin: 100px auto;
 `;

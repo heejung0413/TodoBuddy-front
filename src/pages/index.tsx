@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '@/components/utils/Logo';
 import { UserServices } from '@/api/Services/User';
 import { useCustomToast } from '@/hooks/useCustomToast';
-import { AxiosError } from 'axios';
 import { useAuth } from '@/hooks/useAuth';
 
 const IndexPage = () => {
@@ -92,9 +91,6 @@ const IndexPage = () => {
           </Text>
         </Flex>
       </Grid>
-      <Text my="30px" color="gray" fontSize={12} textAlign="center">
-        Copyright © 2024 All rights reserved | This Site is made with by heejung/heemang/sun-ae
-      </Text>
     </S.Container>
   );
 };

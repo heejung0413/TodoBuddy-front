@@ -15,11 +15,11 @@ const HomePage = () => {
         <Box flexGrow={1}>
           <MemoCalendar />
         </Box>
-        {open ? (
-          <Box flexGrow={1} mb={50} ml={{ md: '20px' }} mx={{ base: '20px', md: '50px' }} minW="fit-content">
+        {open && (
+          <Box flexGrow={2} mb={50} ml={{ md: '20px' }} mx={{ base: '20px', md: '50px' }} minW="fit-content">
             <MemoList />
           </Box>
-        ) : null}
+        )}
       </MemoBox>
     </div>
   );

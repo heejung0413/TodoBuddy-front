@@ -21,6 +21,7 @@ import { MemoData } from '@/api/@types/Memo';
 import { CategoryData } from '@/api/@types/Category';
 import { MemoServices } from '@/api/Services/Memo';
 import { useCustomToast } from '@/hooks/useCustomToast';
+import { useRenderStore } from '@/stores/render';
 
 interface Props {
   memo: MemoData;
@@ -38,6 +39,7 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
   const [selectedCategoryOrderId, setSelectedCategoryOrderId] = useState<number>(memo.categoryOrderId);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(memo.categoryId);
   const toast = useCustomToast();
+  const { render, setRender } = useRenderStore();
 
   const selectedCategory = (categoryId, categoryOrderId) => {
     setSelectedCategoryId(categoryId);
@@ -54,15 +56,15 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
   const handlePatchSubmit = async () => {
     setIsLoading(true);
     try {
-      const data = await MemoServices.patchMemo({
+      await MemoServices.patchMemo({
         memoId: memo.memoId,
         memoDeadLine: new Date(deadLine).toISOString(),
         memoContent: content === '' ? memo.memoContent : content,
         memoLink: link === '' ? memo.memoLink : link,
         categoryId: selectedCategoryId,
       });
-      console.log(data);
       toast.info('메모가 수정되었습니다.');
+      setRender(!render);
       onClose();
     } catch (e) {
       toast.error(e);
@@ -77,6 +79,7 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
       await MemoServices.delete({ memoId: memo.memoId });
       toast.info('해당 메모가 삭제되었습니다.');
       onClose();
+      setRender(!render);
     } catch (e) {
       toast.error(e);
     } finally {
@@ -158,7 +161,7 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
                 저장
               </Button>
             </Flex>
-            {deleteOpen ? (
+            {deleteOpen && (
               <Flex gap={3}>
                 <DeleteMemoBox>정말 해당 메모를 삭제하시겠습니까?</DeleteMemoBox>
                 <Button colorScheme="red" onClick={handleDeleteSubmit}>
@@ -168,7 +171,7 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
                   아니오
                 </Button>
               </Flex>
-            ) : null}
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

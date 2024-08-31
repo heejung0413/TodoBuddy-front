@@ -23,11 +23,12 @@ import { MemoData } from '@/api/@types/Memo';
 import styled from 'styled-components';
 import { MdOutlineLink } from 'react-icons/md';
 import { colors } from '@/styles/theme/@colors';
-import { Link } from 'react-router-dom';
+import { useRenderStore } from '@/stores/render';
 
 const MemoList = () => {
   const [category, setCategory] = useState<CategoryData[]>([]);
   const [memo, setMemo] = useState<MemoData[]>([]);
+  const { render } = useRenderStore();
 
   const filteredMemo = (id: number) => {
     return memo.filter(item => item.categoryOrderId === id);
@@ -54,9 +55,7 @@ const MemoList = () => {
   useEffect(() => {
     fetchCategory();
     fetchMemo();
-  }, []);
-
-  console.log(memo);
+  }, [render]);
 
   const MemoContents = ({ id }) => {
     return (

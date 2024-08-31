@@ -14,10 +14,12 @@ import { useEffect, useState } from 'react';
 import { CategoryServices } from '@/api/Services/Category';
 import { CategoryData } from '@/api/@types/Category';
 import SettingCategoryContents from './Memo/SettingCategoryContents';
+import { useRenderStore } from '@/stores/render';
 
 const SettingCategory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [category, setCategory] = useState<CategoryData[]>([]);
+  const { render } = useRenderStore();
 
   const fetchCategory = async () => {
     try {
@@ -30,7 +32,7 @@ const SettingCategory = () => {
 
   useEffect(() => {
     fetchCategory();
-  }, []);
+  }, [render]);
 
   return (
     <>
