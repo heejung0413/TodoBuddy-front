@@ -62,11 +62,11 @@ export const UserServices: UserClient = {
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await AuthService.post();
-        console.log('ggg');
-      } else {
-        throw new Error(error as string);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('refreshTokenExpiredDate');
       }
+      throw new Error(error as string);
     }
   },
   postCheckEmailCode: async request => {

@@ -44,6 +44,13 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
     setSelectedCategoryOrderId(categoryOrderId);
   };
 
+  const ensureHttp = (value: string) => {
+    if (!value.startsWith('https://')) {
+      return 'https://' + value;
+    }
+    return value;
+  };
+
   const handlePatchSubmit = async () => {
     setIsLoading(true);
     try {
@@ -115,7 +122,7 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
                   placeholder={memo.memoLink ?? '링크 정보 없음'}
                   defaultValue={memo.memoLink}
                   onChange={e => {
-                    setLink(e.target.value);
+                    setLink(ensureHttp(e.target.value));
                   }}
                 />
               </Flex>
@@ -130,7 +137,6 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
                             ? colors.category[selectedCategoryOrderId]
                             : '#FFFFFF'
                         }
-                        // hover-background-color={colors.HoverCategory[selectedCategoryOrderId]}
                         value={value.categoryId}
                         onClick={() => selectedCategory(value.categoryId, value.categoryOrderId)}
                       >
@@ -184,6 +190,7 @@ export const SettingMemoCategory = styled.button`
   border-radius: 10px;
   flex-grow: 1;
   margin: 5px 10px;
+  overflow: auto;
   background-color: ${props => props['background-color']};
   &:hover {
     background-color: ${props => props['hover-background-color']};

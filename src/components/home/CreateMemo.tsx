@@ -41,9 +41,9 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
     try {
       if (selectedCategoryId) {
         if (value.trim() !== '') {
-          const result = await MemoServices.post({ memoContent: value, categoryId: selectedCategoryId });
-          console.log(result);
+          await MemoServices.post({ memoContent: value, categoryId: selectedCategoryId });
           setValue('');
+          toast.success('메모가 생성되었습니다.');
         } else {
           toast.info('메모 내용을 입력해주세요.');
         }

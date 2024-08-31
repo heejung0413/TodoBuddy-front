@@ -42,15 +42,14 @@ axiosInstance.interceptors.response.use(
 
         try {
           const newToken = await AuthService.post();
+
           if (newToken) {
-            originalRequest.headers.Authorization = `Bearer ${newToken.data.accessToken}`;
+            originalRequest.headers['Authorization'] = `Bearer ${newToken.data.accessToken}`;
             isLoggingOut = false;
             return axiosInstance(originalRequest);
           }
         } catch (e: any) {
-          if (e.response?.status === 401) {
-            return Promise.reject(e);
-          }
+          return Promise.reject(e);
         } finally {
           isLoggingOut = false;
         }

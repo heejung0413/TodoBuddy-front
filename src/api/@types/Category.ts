@@ -30,6 +30,12 @@ export interface PatchCategoryResponse {
   data: CategoryData;
 }
 
+export interface DeleteCategoryResponse {
+  code: number;
+  messsage: string;
+  data: Array<any>;
+}
+
 export interface CategoryClient {
   get(): Promise<CategoryResponse>;
   post(request: PostCategoryRequest): Promise<void>;

@@ -21,6 +21,9 @@ import { CategoryData } from '@/api/@types/Category';
 import { MemoServices } from '@/api/Services/Memo';
 import { MemoData } from '@/api/@types/Memo';
 import styled from 'styled-components';
+import { MdOutlineLink } from 'react-icons/md';
+import { colors } from '@/styles/theme/@colors';
+import { Link } from 'react-router-dom';
 
 const MemoList = () => {
   const [category, setCategory] = useState<CategoryData[]>([]);
@@ -53,18 +56,15 @@ const MemoList = () => {
     fetchMemo();
   }, []);
 
+  console.log(memo);
+
   const MemoContents = ({ id }) => {
     return (
       <>
         {category
           .filter(item => item.categoryOrderId === id)
           .map(v => (
-            <Badge
-              key={v.categoryOrderId} // 고유한 key 속성 추가
-              padding="10px 20px"
-              backgroundColor={`category.${id}`}
-              borderRadius={10}
-            >
+            <Badge key={v.categoryOrderId} padding="10px 20px" backgroundColor={`category.${id}`} borderRadius={10}>
               {v.categoryName}
             </Badge>
           ))}
@@ -76,6 +76,13 @@ const MemoList = () => {
                 <Checkbox size="lg" colorScheme="gray" flexGrow={1}>
                   <HStack>
                     <Text my="auto">{memoItem.memoContent}</Text>
+                    {memoItem.memoLink !== null ? (
+                      <IconStyle background-color={colors.brand[300]}>
+                        <a href={memoItem.memoLink} target="_blank">
+                          <MdOutlineLink />
+                        </a>
+                      </IconStyle>
+                    ) : null}
                   </HStack>
                   <Text color="gray" fontSize="0.8em">
                     {memoItem.memoDeadline}
@@ -86,7 +93,9 @@ const MemoList = () => {
             </Flex>
           ))
         ) : (
-          <Text textAlign="center">해당 카테고리에 메모 없음</Text>
+          <Text textAlign="center" color="gray">
+            (해당 카테고리에 메모 없음)
+          </Text>
         )}
       </>
     );
