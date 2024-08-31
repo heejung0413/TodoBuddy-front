@@ -13,7 +13,6 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import header from '@/../public/index/TodolistHeader.svg';
-import styled from 'styled-components';
 import SettingCategory from './SettingCategory';
 import SettingMemo from './SettingMemo';
 import { useEffect, useState } from 'react';
@@ -21,10 +20,16 @@ import { CategoryServices } from '@/api/Services/Category';
 import { CategoryData } from '@/api/@types/Category';
 import { MemoServices } from '@/api/Services/Memo';
 import { MemoData } from '@/api/@types/Memo';
+import styled from 'styled-components';
 
 const MemoList = () => {
   const [category, setCategory] = useState<CategoryData[]>([]);
   const [memo, setMemo] = useState<MemoData[]>([]);
+
+  const filteredMemo = (id: number) => {
+    return memo.filter(item => item.categoryOrderId === id);
+  };
+
   const fetchCategory = async () => {
     try {
       const data = await CategoryServices.get();
@@ -43,8 +48,6 @@ const MemoList = () => {
     }
   };
 
-  console.log(memo);
-
   useEffect(() => {
     fetchCategory();
     fetchMemo();
@@ -56,32 +59,39 @@ const MemoList = () => {
         {category
           .filter(item => item.categoryOrderId === id)
           .map(v => (
-            <Badge padding="10px 20px" backgroundColor={`category.${id}`} borderRadius={10}>
+            <Badge
+              key={v.categoryOrderId} // 고유한 key 속성 추가
+              padding="10px 20px"
+              backgroundColor={`category.${id}`}
+              borderRadius={10}
+            >
               {v.categoryName}
             </Badge>
           ))}
-        {memo
-          .filter(item => item.categoryOrderId === id)
-          .map((memoItem, index) => {
-            return (
-              <Flex key={index} margin="5px 0" flexDirection="column" gap={5} w="100%">
-                <Flex>
-                  <Checkbox size="lg" colorScheme="gray" flexGrow={1}>
-                    <HStack>
-                      <Text my="auto">{memoItem.memoContent}</Text>
-                    </HStack>
-                    <Text color="gray" fontSize="0.8em">
-                      {memoItem.memoDeadline}
-                    </Text>
-                  </Checkbox>
-                  <SettingMemo memo={memoItem} category={category} />
-                </Flex>
+
+        {filteredMemo(id).length > 0 ? (
+          filteredMemo(id).map((memoItem, index) => (
+            <Flex key={index} margin="5px 0" flexDirection="column" gap={5} w="100%">
+              <Flex>
+                <Checkbox size="lg" colorScheme="gray" flexGrow={1}>
+                  <HStack>
+                    <Text my="auto">{memoItem.memoContent}</Text>
+                  </HStack>
+                  <Text color="gray" fontSize="0.8em">
+                    {memoItem.memoDeadline}
+                  </Text>
+                </Checkbox>
+                <SettingMemo memo={memoItem} category={category} />
               </Flex>
-            );
-          })}
+            </Flex>
+          ))
+        ) : (
+          <Text textAlign="center">해당 카테고리에 메모 없음</Text>
+        )}
       </>
     );
   };
+
   return (
     <>
       <Flex flexDirection="row-reverse">
@@ -96,9 +106,13 @@ const MemoList = () => {
         <CardBody>
           <Flex flexDirection="column">
             <Box>
-              {category.map(value => (
-                <MemoContents id={value.categoryOrderId} />
-              ))}
+              {category.map(value =>
+                filteredMemo.length > 0 ? (
+                  <MemoContents key={value.categoryOrderId} id={value.categoryOrderId} />
+                ) : (
+                  <div key={value.categoryOrderId}>ss</div>
+                ),
+              )}
             </Box>
           </Flex>
         </CardBody>

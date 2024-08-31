@@ -1,8 +1,10 @@
 import moment from 'moment';
 import { GrPowerReset } from 'react-icons/gr';
 import * as S from '@/styles/home/MemoCalendar.styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@chakra-ui/react';
+import { MemoServices } from '@/api/Services/Memo';
+import { MemoData } from '@/api/@types/Memo';
 
 export const convertToLocalTime = (dateString: string | number | Date) => {
   const date = new Date(dateString);
@@ -14,16 +16,59 @@ export const convertToLocalTime = (dateString: string | number | Date) => {
     hour: 'numeric',
     minute: 'numeric',
   };
-  return localTime.toLocaleString(undefined, options); // 로컬 타임존으로 변환하여 문자열로 반환
+  return localTime.toLocaleString(undefined, options);
 };
 
 const MemoCalendar = () => {
   const today = new Date();
   const [date, setDate] = useState(today);
   const [todayReset, setTodayReset] = useState<Boolean>(true);
-  const [activeStartDate, setActiveStartDate] = useState<Date | null>(new Date());
+  const [activeStartDate, setActiveStartDate] = useState<Date | null>(today);
+  const [memo, setMemo] = useState<MemoData[]>([]);
 
-  const attendDay = ['2023-12-03', '2023-12-13'];
+  const fetchMemo = async () => {
+    try {
+      const result = await MemoServices.get({ memoStatus: 'NOT_COMPLETED' });
+      setMemo(result.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  console.log(memo);
+
+  useEffect(() => {
+    fetchMemo();
+  }, []);
+
+  const attendDay1 = ['2024-08-30', '2023-12-13'];
+
+  // const attendDay = memo
+  //   .map(value => {
+  //     if (value.memoDeadline) {
+  //       return value.memoDeadline.split('T')[0];
+  //     } else {
+  //       return null;
+  //     }
+  //   })
+  //   .filter(date => date !== null); // null 값을 필터링하여 유효한 날짜만 유지  (value.memoDeadline || '').split('T')[0];
+
+  const attendDay =
+    memo &&
+    memo
+      .filter(value => value.memoDeadline !== '')
+      .map(value => {
+        const date = (value.memoDeadline || '').split('T')[0];
+        if (date) {
+          return date;
+        } else {
+          console.error('Invalid date format:', value.memoDeadline);
+          return '';
+        }
+      });
+
+  console.log('attendDay', attendDay);
+  console.log('attendDay1', attendDay1);
 
   const handleDateChange = newDate => {
     setDate(newDate);
@@ -31,14 +76,11 @@ const MemoCalendar = () => {
 
   const handleDayClick = date => {
     setTodayReset(false);
-    console.log(date); // 클릭된 날짜를 콘솔에 출력
-    setDate(date); // 선택된 날짜를 상태로 설정 (선택 사항)
+    setDate(date);
   };
 
   const handleTodayClick = () => {
     setTodayReset(true);
-    const today = new Date();
-    console.log(date);
     setActiveStartDate(today);
     setDate(today);
   };
@@ -52,9 +94,9 @@ const MemoCalendar = () => {
         value={todayReset ? today : date}
         calendarType="gregory"
         onChange={handleDateChange}
-        formatDay={(locale, date) => moment(date).format('D')} // 일 제거 숫자만 보이게
-        formatYear={(locale, date) => moment(date).format('YYYY')} // 네비게이션 눌렀을때 숫자 년도만 보이게
-        formatMonthYear={(locale, date) => moment(date).format('YYYY. MM')} // 네비게이션에서 2023. 12 이렇게 보이도록 설정
+        formatDay={(_, date) => moment(date).format('D')} // 일 제거 숫자만 보이게
+        formatYear={(_, date) => moment(date).format('YYYY')} // 네비게이션 눌렀을때 숫자 년도만 보이게
+        formatMonthYear={(_, date) => moment(date).format('YYYY. MM')} // 네비게이션에서 2023. 12 이렇게 보이도록 설정
         showNeighboringMonth={false} // 전달, 다음달 날짜 숨기기
         next2Label={null} // +1년 & +10년 이동 버튼 숨기기
         prev2Label={null} // -1년 & -10년 이동 버튼 숨기기
@@ -65,7 +107,7 @@ const MemoCalendar = () => {
           if (view === 'month' && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()) {
             html.push(<S.StyledToday key={'today'}>오늘</S.StyledToday>);
           }
-          if (attendDay.find(x => x === moment(date).format('YYYY-MM-DD'))) {
+          if (attendDay1.find(x => x === moment(date).format('YYYY-MM-DD'))) {
             html.push(<S.StyledDot key={moment(date).format('YYYY-MM-DD')} />);
           }
           return <div style={{ display: 'flex', justifyContent: 'center' }}>{html}</div>;

@@ -22,16 +22,11 @@ const IndexPage = () => {
     setIsLoading(true);
     try {
       await UserServices.login({ email: email, password: password });
-      navigate('/'); // 홈으로 리다이렉션
+      navigate('/');
       toast.success('로그인에 성공했습니다.');
       setIsLoggedIn(true);
     } catch (e) {
-      const error = e as AxiosError;
-      if (error.response && error.response.status === 400) {
-        toast.info('로그인 실패: 비밀번호가 틀렸습니다.');
-      } else {
-        toast.error('로그인 실패: 비밀번호가 틀렸습니다.');
-      }
+      toast.error(e);
     } finally {
       setIsLoading(false);
     }

@@ -19,6 +19,8 @@ import styled from 'styled-components';
 import { FC, useState } from 'react';
 import { MemoData } from '@/api/@types/Memo';
 import { CategoryData } from '@/api/@types/Category';
+import { MemoServices } from '@/api/Services/Memo';
+import { useCustomToast } from '@/hooks/useCustomToast';
 
 interface Props {
   memo: MemoData;
@@ -31,46 +33,49 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [deadLine, setDeadLine] = useState<string>(today.toDateString());
   const [link, setLink] = useState<string>('');
-  // const options = category.map(value => value.categoryName);
-  // const number = category.map(value => value.categoryOrderId);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [content, setContent] = useState<string>('');
+  const [selectedCategoryOrderId, setSelectedCategoryOrderId] = useState<number>(memo.categoryOrderId);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(memo.categoryId);
+  const toast = useCustomToast();
 
-  // const handleSubmit = async () => {
-  //   try{
-  //     await MemoServices.patchMemo({memoId: memo.memoId, memoDeadLine: })
-  //   }
-  // }
+  const selectedCategory = (categoryId, categoryOrderId) => {
+    setSelectedCategoryId(categoryId);
+    setSelectedCategoryOrderId(categoryOrderId);
+  };
 
-  // function RadioCard(props) {
-  //   const { getInputProps, getRadioProps } = useRadio(props);
+  const handlePatchSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const data = await MemoServices.patchMemo({
+        memoId: memo.memoId,
+        memoDeadLine: new Date(deadLine).toISOString(),
+        memoContent: content === '' ? memo.memoContent : content,
+        memoLink: link === '' ? memo.memoLink : link,
+        categoryId: selectedCategoryId,
+      });
+      console.log(data);
+      toast.info('메모가 수정되었습니다.');
+      onClose();
+    } catch (e) {
+      toast.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  //   const input = getInputProps();
-  //   const checkbox = getRadioProps();
-
-  //   return (
-  //     <Box as="label">
-  //       <input {...input} />
-  //       <Box
-  //         {...checkbox}
-  //         cursor="pointer"
-  //         borderWidth="1px"
-  //         borderRadius="md"
-  //         boxShadow="md"
-  //         _checked={{
-  //           bg: `HoverCategory.1`,
-  //           color: 'white',
-  //           borderColor: 'teal.600',
-  //         }}
-  //         _focus={{
-  //           boxShadow: 'outline',
-  //         }}
-  //         px={5}
-  //         py={3}
-  //       >
-  //         {props.children}
-  //       </Box>
-  //     </Box>
-  //   );
-  // }
+  const handleDeleteSubmit = async () => {
+    setIsLoading(true);
+    try {
+      await MemoServices.delete({ memoId: memo.memoId });
+      toast.info('해당 메모가 삭제되었습니다.');
+      onClose();
+    } catch (e) {
+      toast.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -92,41 +97,47 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
                   type="datetime-local"
                   defaultValue={memo.memoDeadline ?? deadLine}
                   onChange={() => {
-                    setDeadLine(deadLine), console.log(deadLine);
+                    setDeadLine(new Date(deadLine).toISOString()), console.log(deadLine);
                   }}
                 />
               </Flex>
               <Flex>
                 <SettingMemoTitle>내용 수정하기</SettingMemoTitle>
-                <Input placeholder={memo.memoContent} defaultValue={memo.memoContent} />
+                <Input
+                  placeholder={memo.memoContent}
+                  defaultValue={memo.memoContent}
+                  onChange={e => setContent(e.target.value)}
+                />
               </Flex>
               <Flex>
                 <SettingMemoTitle>링크 추가하기</SettingMemoTitle>
                 <Input
                   placeholder={memo.memoLink ?? '링크 정보 없음'}
                   defaultValue={memo.memoLink}
-                  value={link}
-                  onChange={() => setLink(link)}
+                  onChange={e => {
+                    setLink(e.target.value);
+                  }}
                 />
               </Flex>
               <Flex>
                 <SettingMemoTitle>카테고리 분류</SettingMemoTitle>
                 <Flex>
-                  {/* {category.map(item => (
-                    <RadioGroup defaultValue="2">
-                      <Stack spacing={5} direction="row">
-                        <Radio colorScheme="red" value="1">
-                          <SettingMemoCategory
-                            background-color={colors.category[item.categoryOrderId]}
-                            hover-background-color={colors.HoverCategory[item.categoryOrderId]}
-                            value="토익"
-                          >
-                            {item.categoryName}
-                          </SettingMemoCategory>
-                        </Radio>
-                      </Stack>
-                    </RadioGroup>
-                  ))} */}
+                  <Flex>
+                    {category.map(value => (
+                      <SettingMemoCategory
+                        background-color={
+                          selectedCategoryOrderId === value.categoryOrderId
+                            ? colors.category[selectedCategoryOrderId]
+                            : '#FFFFFF'
+                        }
+                        // hover-background-color={colors.HoverCategory[selectedCategoryOrderId]}
+                        value={value.categoryId}
+                        onClick={() => selectedCategory(value.categoryId, value.categoryOrderId)}
+                      >
+                        {value.categoryName}
+                      </SettingMemoCategory>
+                    ))}
+                  </Flex>
                 </Flex>
               </Flex>
             </Stack>
@@ -137,14 +148,16 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
               <Button variant="outline" colorScheme="red" flexGrow={1} onClick={() => setDeleteOpen(true)}>
                 삭제
               </Button>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
+              <Button colorScheme="blue" mr={3} onClick={handlePatchSubmit} isLoading={isLoading}>
                 저장
               </Button>
             </Flex>
             {deleteOpen ? (
               <Flex gap={3}>
                 <DeleteMemoBox>정말 해당 메모를 삭제하시겠습니까?</DeleteMemoBox>
-                <Button colorScheme="red">네</Button>
+                <Button colorScheme="red" onClick={handleDeleteSubmit}>
+                  네
+                </Button>
                 <Button variant="outline" colorScheme="red" onClick={() => setDeleteOpen(false)}>
                   아니오
                 </Button>
@@ -181,7 +194,7 @@ export const SettingMemoCategory = styled.button`
 `;
 
 export const DeleteMemoBox = styled.div`
-  background-color: ${colors.HoverCategory[1]};
+  background-color: ${colors.category[0]};
   padding: 5px 10px;
   border-radius: 10px;
 `;

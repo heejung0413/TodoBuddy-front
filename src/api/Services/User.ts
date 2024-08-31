@@ -45,8 +45,15 @@ export const UserServices: UserClient = {
         console.error('Access token or refresh token is undefined');
       }
       return response.data;
-    } catch (error) {
-      throw new Error(error as string);
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        throw new Error('비밀번호가 올바르지 않습니다.');
+      }
+      if (error.response && error.response.status === 404) {
+        throw new Error('사용자를 찾을 수 없습니다.');
+      } else {
+        throw new Error(error as string);
+      }
     }
   },
   get: async () => {
@@ -56,6 +63,7 @@ export const UserServices: UserClient = {
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
         await AuthService.post();
+        console.log('ggg');
       } else {
         throw new Error(error as string);
       }
@@ -89,6 +97,7 @@ export const UserServices: UserClient = {
         const response = await axiosInstance.post(`${ROUTE}/logout`, null, request);
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('refreshTokenExpiredDate');
         return response.data;
       }
     } catch (error) {
