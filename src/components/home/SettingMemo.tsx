@@ -46,13 +46,6 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
     setSelectedCategoryOrderId(categoryOrderId);
   };
 
-  const ensureHttp = (value: string) => {
-    if (!value.startsWith('https://')) {
-      return 'https://' + value;
-    }
-    return value;
-  };
-
   const handlePatchSubmit = async () => {
     setIsLoading(true);
     try {
@@ -60,7 +53,7 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
         memoId: memo.memoId,
         memoDeadLine: new Date(deadLine).toISOString(),
         memoContent: content === '' ? memo.memoContent : content,
-        memoLink: link === '' ? memo.memoLink : link,
+        memoLink: link,
         categoryId: selectedCategoryId,
       });
       toast.info('메모가 수정되었습니다.');
@@ -71,6 +64,18 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const ensureHttp = (value: string): string => {
+    const trimmedValue = value.trim();
+
+    if (trimmedValue === '') {
+      return '';
+    } else if (!trimmedValue.startsWith('https://')) {
+      return 'https://' + trimmedValue;
+    }
+
+    return trimmedValue;
   };
 
   const handleDeleteSubmit = async () => {

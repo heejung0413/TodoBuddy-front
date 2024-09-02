@@ -1,6 +1,7 @@
 import CreateMemo from '@/components/home/CreateMemo';
 import MemoCalendar from '@/components/home/MemoCalendar';
 import MemoList from '@/components/home/MemoList';
+import Secession from '@/components/utils/Secession';
 import { Box } from '@chakra-ui/react';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -21,6 +22,7 @@ const HomePage = () => {
           </Box>
         )}
       </MemoBox>
+      <Secession />
     </div>
   );
 };

@@ -1,7 +1,5 @@
-import { TStatus } from './@asConst';
-
 export interface GetMemoRequest {
-  memoStatus?: keyof TStatus;
+  memoStatus: string | null;
 }
 
 export interface GetMemoResponse {
@@ -17,6 +15,7 @@ export interface MemoData {
   memoContent: string;
   memoLink: string;
   memoDeadline: string;
+  memoStatus: string;
 }
 
 export interface GetMemoData extends MemoData {
@@ -62,7 +61,7 @@ export interface PatchMemoResponse {
 
 export interface PatchMemoStatusRequest {
   memoId: number;
-  memoStatus: keyof TStatus;
+  memoStatus: string | null;
 }
 
 export interface PatchMemoStatusResponse {

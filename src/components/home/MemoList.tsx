@@ -1,38 +1,22 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Heading,
-  Image,
-  Flex,
-  Badge,
-  Checkbox,
-  Box,
-  Text,
-  IconProps,
-  HStack,
-} from '@chakra-ui/react';
+import { Card, CardBody, CardHeader, Heading, Image, Flex, Box, IconProps, HStack, Button } from '@chakra-ui/react';
 import header from '@/../public/index/TodolistHeader.svg';
 import SettingCategory from './SettingCategory';
-import SettingMemo from './SettingMemo';
 import { useEffect, useState } from 'react';
 import { CategoryServices } from '@/api/Services/Category';
 import { CategoryData } from '@/api/@types/Category';
 import { MemoServices } from '@/api/Services/Memo';
 import { MemoData } from '@/api/@types/Memo';
 import styled from 'styled-components';
-import { MdOutlineLink } from 'react-icons/md';
-import { colors } from '@/styles/theme/@colors';
 import { useRenderStore } from '@/stores/render';
+import MemoContents from './MemoContents';
+import { useStateStore } from '@/stores/status';
+import FilteredMemo from './FilteredMemo';
 
 const MemoList = () => {
   const [category, setCategory] = useState<CategoryData[]>([]);
   const [memo, setMemo] = useState<MemoData[]>([]);
   const { render } = useRenderStore();
-
-  const filteredMemo = (id: number) => {
-    return memo.filter(item => item.categoryOrderId === id);
-  };
+  const { status } = useStateStore();
 
   const fetchCategory = async () => {
     try {
@@ -45,7 +29,7 @@ const MemoList = () => {
 
   const fetchMemo = async () => {
     try {
-      const result = await MemoServices.get({ memoStatus: 'NOT_COMPLETED' });
+      const result = await MemoServices.get({ memoStatus: status === '' ? null : status });
       setMemo(result.data);
     } catch (e) {
       console.error(e);
@@ -55,50 +39,7 @@ const MemoList = () => {
   useEffect(() => {
     fetchCategory();
     fetchMemo();
-  }, [render]);
-
-  const MemoContents = ({ id }) => {
-    return (
-      <>
-        {category
-          .filter(item => item.categoryOrderId === id)
-          .map(v => (
-            <Badge key={v.categoryOrderId} padding="10px 20px" backgroundColor={`category.${id}`} borderRadius={10}>
-              {v.categoryName}
-            </Badge>
-          ))}
-
-        {filteredMemo(id).length > 0 ? (
-          filteredMemo(id).map((memoItem, index) => (
-            <Flex key={index} margin="5px 0" flexDirection="column" gap={5} w="100%">
-              <Flex>
-                <Checkbox size="lg" colorScheme="gray" flexGrow={1}>
-                  <HStack>
-                    <Text my="auto">{memoItem.memoContent}</Text>
-                    {memoItem.memoLink !== null ? (
-                      <IconStyle background-color={colors.brand[300]}>
-                        <a href={memoItem.memoLink} target="_blank">
-                          <MdOutlineLink />
-                        </a>
-                      </IconStyle>
-                    ) : null}
-                  </HStack>
-                  <Text color="gray" fontSize="0.8em">
-                    {memoItem.memoDeadline}
-                  </Text>
-                </Checkbox>
-                <SettingMemo memo={memoItem} category={category} />
-              </Flex>
-            </Flex>
-          ))
-        ) : (
-          <Text textAlign="center" color="gray">
-            (해당 카테고리에 메모 없음)
-          </Text>
-        )}
-      </>
-    );
-  };
+  }, [render, status]);
 
   return (
     <>
@@ -111,16 +52,16 @@ const MemoList = () => {
           <Heading size="md">TODO LIST</Heading>
         </CardHeader>
 
+        <HStack ml={5}>
+          <FilteredMemo />
+        </HStack>
+
         <CardBody>
           <Flex flexDirection="column">
             <Box>
-              {category.map(value =>
-                filteredMemo.length > 0 ? (
-                  <MemoContents key={value.categoryOrderId} id={value.categoryOrderId} />
-                ) : (
-                  <div key={value.categoryOrderId}>ss</div>
-                ),
-              )}
+              {category.map(value => (
+                <MemoContents id={value.categoryOrderId} memo={memo} category={category} />
+              ))}
             </Box>
           </Flex>
         </CardBody>
