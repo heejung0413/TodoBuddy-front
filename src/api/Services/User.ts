@@ -1,6 +1,5 @@
 import { PostLogoutRequest, UserClient } from '../@types/User';
 import { axiosInstance } from '../client';
-import { AuthService } from './Auth';
 
 const ROUTE = '/users';
 

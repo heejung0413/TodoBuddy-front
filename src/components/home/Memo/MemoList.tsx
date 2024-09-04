@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Heading, Image, Flex, Box, IconProps, HStack, Button } from '@chakra-ui/react';
+import { Card, CardBody, CardHeader, Heading, Image, Flex, Box, IconProps, HStack } from '@chakra-ui/react';
 import header from '@/../public/index/TodolistHeader.svg';
 import SettingCategory from '../Category/SettingCategory';
 import { useEffect, useState } from 'react';
