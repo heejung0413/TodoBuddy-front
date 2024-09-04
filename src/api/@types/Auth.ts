@@ -17,5 +17,5 @@ export interface AuthData {
 }
 
 export interface AuthClient {
-  post(): Promise<AuthResponse>;
+  post(): Promise<string>;
 }

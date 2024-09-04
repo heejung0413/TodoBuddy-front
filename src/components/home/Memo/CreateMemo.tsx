@@ -19,14 +19,14 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
   const [category, setCategory] = useState<CategoryData[]>([]);
   const [value, setValue] = useState<string>('');
   const [_, setIsLoading] = useState<boolean>(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null); // 선택된 카테고리 ID 상태
-  const [selectedCategoryName, setSelectedCategoryName] = useState(''); // 선택된 카테고리 이름 상태
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const toast = useCustomToast();
   const { render, setRender } = useRenderStore();
 
   const handleCategoryClick = (categoryId, categoryName) => {
     setSelectedCategoryId(categoryId);
-    setSelectedCategoryName(categoryName); // 선택된 카테고리 이름 업데이트
+    setSelectedCategoryName(categoryName);
   };
 
   const fetchCategory = async () => {
@@ -62,7 +62,7 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
 
   useEffect(() => {
     fetchCategory();
-  }, []);
+  }, [render]);
   return (
     <S.Container>
       <S.CategoryInputBox>

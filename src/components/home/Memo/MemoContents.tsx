@@ -66,13 +66,13 @@ const MemoContents: FC<Props> = ({ id, memo, category }) => {
 
               <HStack>
                 <Text my="auto">{memoItem.memoContent}</Text>
-                {memoItem.memoLink !== '' ? (
+                {memoItem.memoLink && (
                   <IconStyle background-color={colors.brand[300]}>
                     <a href={memoItem.memoLink} target="_blank">
                       <MdOutlineLink />
                     </a>
                   </IconStyle>
-                ) : null}
+                )}
               </HStack>
               <Text color="gray" fontSize="0.8em">
                 {memoItem.memoDeadline}

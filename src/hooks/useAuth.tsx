@@ -15,7 +15,6 @@ export const useAuth = () => {
   const checkLoginStatus = async () => {
     try {
       await UserServices.get();
-
       setIsLoggedIn(true);
     } catch (e) {
       const error = e as AxiosError;
@@ -25,10 +24,6 @@ export const useAuth = () => {
       setIsLoggedIn(false);
     }
   };
-
-  useEffect(() => {
-    checkLoginStatus();
-  }, [isLoggedIn, location.pathname]);
 
   const fetchAccessToken = async () => {
     try {
@@ -56,6 +51,10 @@ export const useAuth = () => {
       console.log('로그아웃 에러', error);
     }
   };
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, [isLoggedIn, location.pathname]);
 
   return { isLoggedIn, handleLoginOrLogout, setIsLoggedIn };
 };

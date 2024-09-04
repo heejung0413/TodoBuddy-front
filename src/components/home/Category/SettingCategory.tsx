@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from 'react';
 import { CategoryServices } from '@/api/Services/Category';
 import { CategoryData } from '@/api/@types/Category';
-import SettingCategoryContents from './Memo/SettingCategoryContents';
+import SettingCategoryContents from './SettingCategoryContents';
 import { useRenderStore } from '@/stores/render';
 
 const SettingCategory = () => {

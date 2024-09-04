@@ -2,12 +2,12 @@ import axios from 'axios';
 import { AuthService } from './Services/Auth';
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://www.todobuddy.site/api',
+  baseURL: 'https://api.todobuddy.site/api',
   timeout: 4000,
   validateStatus: status => status >= 200 && status < 400,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json', // Preflight 요청을 유발하는 헤더
+    'Content-Type': 'application/json',
   },
 });
 
@@ -34,17 +34,18 @@ axiosInstance.interceptors.response.use(
   },
   async error => {
     const originalRequest = error.config;
+    console.log({ originalRequest });
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+    if (error.response.status === 401) {
       if (!isLoggingOut) {
         isLoggingOut = true;
 
         try {
-          const newToken = await AuthService.post();
+          const accessToken = await AuthService.post();
+          console.log({ accessToken });
 
-          if (newToken) {
-            originalRequest.headers['Authorization'] = `Bearer ${newToken.data.accessToken}`;
+          if (accessToken) {
+            originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
             isLoggingOut = false;
             return axiosInstance(originalRequest);
           }

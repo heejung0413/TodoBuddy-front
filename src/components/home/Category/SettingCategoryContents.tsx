@@ -1,5 +1,5 @@
-import { Box, Button, Card, CardBody, Flex, HStack, Input, Text, VStack } from '@chakra-ui/react';
-import { IconStyle } from '../MemoList';
+import { Box, Button, Card, CardBody, Flex, Input, Text, VStack } from '@chakra-ui/react';
+import { IconStyle } from '../Memo/MemoList';
 import { colors } from '@/styles/theme/styled-components/palette';
 import { FC, useState } from 'react';
 import { CategoryData } from '@/api/@types/Category';

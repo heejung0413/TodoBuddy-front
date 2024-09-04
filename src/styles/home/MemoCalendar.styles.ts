@@ -87,7 +87,9 @@ export const Container = styled.div`
     background: ${colors.brand[300]};
   }
 `;
-export const StyledCalendar = styled(Calendar)``;
+export const StyledCalendar = styled(Calendar)`
+  min-width: max-content;
+`;
 
 export const StyledToday = styled.div`
   font-size: x-small;

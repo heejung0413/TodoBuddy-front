@@ -16,7 +16,8 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'https://www.todobuddy.site',
+        target: 'https://api.todobuddy.site',
+        rewrite: path => path.replace(/^\/api/, ''),
         changeOrigin: true,
         secure: false,
       },

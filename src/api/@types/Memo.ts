@@ -20,7 +20,7 @@ export interface MemoData {
 
 export interface GetMemoData extends MemoData {
   memoCreatedDate: string;
-  memoStatus: keyof TStatus;
+  memoStatus: string;
 }
 
 export interface PostCreateMemoRequest {
@@ -72,7 +72,7 @@ export interface PatchMemoStatusResponse {
 
 export interface PatchMemoData {
   memoId: number;
-  memoStatus: keyof TStatus;
+  memoStatus: string;
 }
 
 export interface MemoClient {
@@ -82,3 +82,18 @@ export interface MemoClient {
   patchMemo(request: PatchMemoRequest): Promise<PatchMemoResponse>;
   patchStatus(request: PatchMemoStatusRequest): Promise<PatchMemoStatusResponse>;
 }
+
+data: [
+  {
+    CategoryOrderId: 1,
+    MemoDeadLine: '2024-09-02T15:58:35.832Z',
+  },
+  {
+    CategoryOrderId: 2,
+    MemoDeadLine: '2024-09-02T15:58:35.832Z',
+  },
+];
+
+// 1) 이런 식으로 deadline이 있는 메모들로만 필터링해 데이터를 가져오고
+// 2) categoryOrderId(order아이디에 따라 캘린더에 다르게 색깔 표시할 용도),
+// 3) MemoDeadline 값 건네주면 좋을 것 같습니다...!! ✨🥹

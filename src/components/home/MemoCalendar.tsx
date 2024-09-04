@@ -19,29 +19,47 @@ export const convertToLocalTime = (dateString: string | number | Date) => {
   return localTime.toLocaleString(undefined, options);
 };
 
+interface FilteredMemo {
+  CategoryOrderId: number;
+  MemoDeadLine: string;
+}
 const MemoCalendar = () => {
   const today = new Date();
   const [date, setDate] = useState(today);
   const [todayReset, setTodayReset] = useState<Boolean>(true);
   const [activeStartDate, setActiveStartDate] = useState<Date | null>(today);
   const [memo, setMemo] = useState<MemoData[]>([]);
+  const [filteredMemos, setFilteredMemos] = useState<FilteredMemo[]>([]);
 
   const fetchMemo = async () => {
     try {
-      const result = await MemoServices.get({ memoStatus: 'NOT_COMPLETED' });
+      const result = await MemoServices.get({ memoStatus: null });
       setMemo(result.data);
+      console.log(memo);
     } catch (e) {
       console.error(e);
     }
   };
 
-  console.log(memo);
-
   useEffect(() => {
     fetchMemo();
   }, []);
 
-  const attendDay1 = ['2024-08-30', '2023-12-13'];
+  useEffect(() => {
+    // memoDeadLine이 있는 메모들만 필터링하고, CategoryOrderId와 MemoDeadLine 값만 추출
+    const filtered = memo
+      .filter(item => item.memoDeadline && item.memoDeadline !== '')
+      .map(item => ({
+        CategoryOrderId: item.categoryOrderId,
+        MemoDeadLine: item.memoDeadline,
+      }));
+
+    setFilteredMemos(filtered);
+  }, [memo]);
+
+  console.log('filteredMemos', filteredMemos);
+
+  // const attendDay1 = ['2024-08-30', '2023-12-13'];
 
   // const attendDay = memo
   //   .map(value => {
@@ -53,19 +71,9 @@ const MemoCalendar = () => {
   //   })
   //   .filter(date => date !== null); // null 값을 필터링하여 유효한 날짜만 유지  (value.memoDeadline || '').split('T')[0];
 
-  const attendDay =
-    memo &&
-    memo
-      .filter(value => value.memoDeadline !== '')
-      .map(value => {
-        const date = (value.memoDeadline || '').split('T')[0];
-        if (date) {
-          return date;
-        } else {
-          console.error('Invalid date format:', value.memoDeadline);
-          return '';
-        }
-      });
+  const attendDay = memo?.filter(value => value.memoDeadline !== '').map(value => value.memoDeadline);
+
+  console.log(attendDay);
 
   const handleDateChange = newDate => {
     setDate(newDate);
@@ -104,7 +112,7 @@ const MemoCalendar = () => {
           if (view === 'month' && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()) {
             html.push(<S.StyledToday key={'today'}>오늘</S.StyledToday>);
           }
-          if (attendDay1.find(x => x === moment(date).format('YYYY-MM-DD'))) {
+          if (attendDay.find(x => x === moment(date).format('YYYY-MM-DD'))) {
             html.push(<S.StyledDot key={moment(date).format('YYYY-MM-DD')} />);
           }
           return <div style={{ display: 'flex', justifyContent: 'center' }}>{html}</div>;

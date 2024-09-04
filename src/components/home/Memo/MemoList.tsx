@@ -1,6 +1,6 @@
 import { Card, CardBody, CardHeader, Heading, Image, Flex, Box, IconProps, HStack, Button } from '@chakra-ui/react';
 import header from '@/../public/index/TodolistHeader.svg';
-import SettingCategory from './SettingCategory';
+import SettingCategory from '../Category/SettingCategory';
 import { useEffect, useState } from 'react';
 import { CategoryServices } from '@/api/Services/Category';
 import { CategoryData } from '@/api/@types/Category';
@@ -46,7 +46,7 @@ const MemoList = () => {
       <Flex flexDirection="row-reverse">
         <SettingCategory />
       </Flex>
-      <Card backgroundColor="brand.50" minW="100%" minH="80%">
+      <Card backgroundColor="brand.50" minW="100%" h="80%">
         <CardHeader textAlign="center">
           <Image src={header} margin="0 auto" />
           <Heading size="md">TODO LIST</Heading>
@@ -56,7 +56,7 @@ const MemoList = () => {
           <FilteredMemo />
         </HStack>
 
-        <CardBody>
+        <CardBody overflow="auto">
           <Flex flexDirection="column">
             <Box>
               {category.map(value => (

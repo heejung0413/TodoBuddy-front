@@ -63,7 +63,6 @@ export const UserServices: UserClient = {
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         localStorage.removeItem('refreshTokenExpiredDate');
       }
       throw new Error(error as string);
@@ -100,7 +99,6 @@ export const UserServices: UserClient = {
         };
         const response = await axiosInstance.post(`${ROUTE}/logout`, null, request);
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         localStorage.removeItem('refreshTokenExpiredDate');
         return response.data;
       }

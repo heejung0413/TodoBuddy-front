@@ -15,7 +15,7 @@ export const AuthService: AuthClient = {
       const accessToken = response.data.data.accessToken;
       localStorage.removeItem('accessToken');
       localStorage.setItem('accessToken', accessToken);
-      return accessToken;
+      return accessToken as string;
     } catch (error) {
       throw error;
     }
