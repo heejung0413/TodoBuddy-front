@@ -42,7 +42,6 @@ axiosInstance.interceptors.response.use(
 
         try {
           const accessToken = await AuthService.post();
-          console.log({ accessToken });
 
           if (accessToken) {
             originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;

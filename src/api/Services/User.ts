@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { PostLogoutRequest, UserClient } from '../@types/User';
 import { axiosInstance } from '../client';
 
@@ -61,8 +62,7 @@ export const UserServices: UserClient = {
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshTokenExpiredDate');
+        console.log('401');
       }
       throw new Error(error as string);
     }
