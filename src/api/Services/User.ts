@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { PostLogoutRequest, UserClient } from '../@types/User';
 import { axiosInstance } from '../client';
 
