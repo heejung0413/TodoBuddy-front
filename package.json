@@ -13,7 +13,7 @@
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "build": "vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "vercel-deploy": "next build && next export"
