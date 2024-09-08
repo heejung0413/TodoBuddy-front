@@ -52,7 +52,7 @@ const SettingCategory = () => {
           <ModalCloseButton />
           <ModalBody>
             <VStack>
-              {[0, 1, 2].map(value => (
+              {[1, 2, 3].map(value => (
                 <SettingCategoryContents categoryOrderId={value} category={category} onClose={onClose} />
               ))}
             </VStack>
