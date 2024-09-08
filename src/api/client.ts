@@ -1,14 +1,12 @@
 import axios from 'axios';
 import { AuthService } from './Services/Auth';
+import { UserServices } from './Services/User';
 
 export const axiosInstance = axios.create({
   baseURL: 'https://api.todobuddy.site/api',
   timeout: 4000,
   validateStatus: status => status >= 200 && status < 400,
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 axiosInstance.interceptors.request.use(async config => {
@@ -34,15 +32,13 @@ axiosInstance.interceptors.response.use(
   },
   async error => {
     const originalRequest = error.config;
-    console.log({ originalRequest });
 
     if (error.response.status === 401) {
       if (!isLoggingOut) {
         isLoggingOut = true;
-
         try {
+          localStorage.removeItem('accessToken');
           const accessToken = await AuthService.post();
-
           if (accessToken) {
             originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
             isLoggingOut = false;

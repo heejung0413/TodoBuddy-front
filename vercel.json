@@ -9,5 +9,11 @@
         "Access-Control-Allow-Origin": "*"
       }
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://api.todobuddy.site"
+    }
   ]
 }

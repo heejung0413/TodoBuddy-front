@@ -25,15 +25,15 @@ const second = {
 };
 
 const category = {
-  0: '#FFCECE',
-  1: '#FFF7B7',
-  2: '#D0FFD9',
+  1: '#FFCECE',
+  2: '#FFF7B7',
+  3: '#D0FFD9',
 };
 
 const HoverCategory = {
-  0: '#FF5A5A',
-  1: '#FFF28B',
-  2: '#3CFE60',
+  1: '#FF5A5A',
+  2: '#FFF28B',
+  3: '#3CFE60',
 };
 
 export const colors = {

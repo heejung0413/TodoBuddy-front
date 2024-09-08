@@ -5,17 +5,10 @@ const ROUTE = '/auth';
 export const AuthService: AuthClient = {
   post: async () => {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      const request = {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      };
-      const response = await axiosInstance.post(`${ROUTE}/reissue`, null, request);
+      const response = await axiosInstance.post(`${ROUTE}/reissue`);
       const accessToken = response.data.data.accessToken;
-      localStorage.removeItem('accessToken');
       localStorage.setItem('accessToken', accessToken);
-      return accessToken as string;
+      return accessToken;
     } catch (error) {
       throw error;
     }

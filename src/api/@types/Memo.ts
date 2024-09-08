@@ -14,7 +14,7 @@ export interface MemoData {
   memoId: number;
   memoContent: string;
   memoLink: string;
-  memoDeadline: string;
+  memoDeadLine: string;
   memoStatus: string;
 }
 
@@ -47,7 +47,7 @@ export interface DeleteMemoResponse {
 
 export interface PatchMemoRequest {
   memoId: number;
-  memoDeadLine?: string;
+  memoDeadLine?: string | null;
   memoContent: string;
   memoLink?: string;
   categoryId: number;

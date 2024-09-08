@@ -17,6 +17,19 @@ interface Props {
   category: CategoryData[];
 }
 
+export const convertToLocalTime = (dateString: string | number | Date) => {
+  const date = new Date(dateString);
+  const localTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  };
+  return localTime.toLocaleString(undefined, options); // 로컬 타임존으로 변환하여 문자열로 반환
+};
+
 const MemoContents: FC<Props> = ({ id, memo, category }) => {
   const { render, setRender } = useRenderStore();
 
@@ -48,6 +61,8 @@ const MemoContents: FC<Props> = ({ id, memo, category }) => {
       return <FaRegCircle style={{ margin: 'auto 3px', fontSize: '25px' }} onClick={handleChangeStatus} />;
     }
   };
+
+  console.log(memo);
   return (
     <Box mb={10}>
       {category
@@ -61,7 +76,7 @@ const MemoContents: FC<Props> = ({ id, memo, category }) => {
       {filteredMemo(id).length > 0 ? (
         filteredMemo(id).map((memoItem, index) => (
           <Flex key={index} margin="5px 0" flexDirection="column" gap={5} w="100%" my={5}>
-            <Flex>
+            <Flex gap={3}>
               <StatusIcon status={memoItem.memoStatus} id={memoItem.memoId} />
 
               <HStack>
@@ -74,8 +89,8 @@ const MemoContents: FC<Props> = ({ id, memo, category }) => {
                   </IconStyle>
                 )}
               </HStack>
-              <Text color="gray" fontSize="0.8em">
-                {memoItem.memoDeadline}
+              <Text color="gray" fontSize="0.8em" my="auto">
+                {memoItem.memoDeadLine && convertToLocalTime(memoItem.memoDeadLine)}
               </Text>
 
               <SettingMemo memo={memoItem} category={category} />

@@ -1,8 +1,8 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import IndexPage from './pages';
+import LoginPage from './pages/home/login';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import theme from './styles/theme';
-import HomePage from './pages/home';
+import HomePage from './pages';
 import Layout from './components/Layout';
 import LoginFindPage from './pages/home/login/find';
 import SignUpPage from './pages/home/login/signUp';
@@ -53,9 +53,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'login',
-
         children: [
-          { index: true, element: <IndexPage /> },
+          { index: true, element: <LoginPage /> },
           {
             path: 'find',
             element: <LoginFindPage />,

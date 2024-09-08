@@ -60,9 +60,6 @@ export const UserServices: UserClient = {
       const response = await axiosInstance.get(`${ROUTE}/me`);
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        console.log('401');
-      }
       throw new Error(error as string);
     }
   },

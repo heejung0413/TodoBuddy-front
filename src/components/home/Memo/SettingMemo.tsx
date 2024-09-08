@@ -14,14 +14,16 @@ import {
   ModalOverlay,
   Stack,
   useDisclosure,
+  useEditable,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { MemoData } from '@/api/@types/Memo';
 import { CategoryData } from '@/api/@types/Category';
 import { MemoServices } from '@/api/Services/Memo';
 import { useCustomToast } from '@/hooks/useCustomToast';
 import { useRenderStore } from '@/stores/render';
+import moment from 'moment';
 
 interface Props {
   memo: MemoData;
@@ -29,10 +31,9 @@ interface Props {
 }
 
 const SettingMemo: FC<Props> = ({ memo, category }) => {
-  const today = new Date();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
-  const [deadLine, setDeadLine] = useState<string>(today.toDateString());
+  const [deadLine, setDeadLine] = useState<string>();
   const [link, setLink] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
@@ -46,12 +47,24 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
     setSelectedCategoryOrderId(categoryOrderId);
   };
 
+  const formatDate = (date: string) => {
+    return moment(date).add(3, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+  };
+
+  const handleDeadLineOnChange = (value: string) => {
+    setDeadLine(formatDate(value));
+  };
+
+  const AddHours = (value: string) => {
+    return moment(value).add(3, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+  };
+
   const handlePatchSubmit = async () => {
     setIsLoading(true);
     try {
       await MemoServices.patchMemo({
         memoId: memo.memoId,
-        memoDeadLine: new Date(deadLine).toISOString(),
+        memoDeadLine: deadLine && AddHours(deadLine),
         memoContent: content === '' ? memo.memoContent : content,
         memoLink: link,
         categoryId: selectedCategoryId,
@@ -92,6 +105,8 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
     }
   };
 
+  useEffect(() => {}, [deadLine]);
+
   return (
     <>
       <IconStyle style={{ display: 'flex' }} background-color={colors.brand[300]} onClick={onOpen}>
@@ -110,11 +125,15 @@ const SettingMemo: FC<Props> = ({ memo, category }) => {
                   placeholder="Select Date and Time"
                   size="md"
                   type="datetime-local"
-                  defaultValue={memo.memoDeadline ?? deadLine}
-                  onChange={() => {
-                    setDeadLine(new Date(deadLine).toISOString()), console.log(deadLine);
-                  }}
+                  defaultValue={memo.memoDeadLine ?? deadLine}
+                  value={deadLine}
+                  onChange={e => handleDeadLineOnChange(e.target.value)}
                 />
+                {deadLine && (
+                  <Button colorScheme="red" onClick={() => setDeadLine('')}>
+                    삭제
+                  </Button>
+                )}
               </Flex>
               <Flex>
                 <SettingMemoTitle>내용 수정하기</SettingMemoTitle>
