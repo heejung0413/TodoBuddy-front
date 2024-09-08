@@ -102,7 +102,7 @@ const CreateMemo: FC<Props> = ({ setOpen }) => {
       </S.CategoryInputBox>
       <Flex gap={3}>
         <Button colorScheme="brand" minW="fit-content" flexGrow={{ base: '1', md: '0' }} onClick={handleSubmit}>
-          메모하기
+          메모하기 (임시)
         </Button>
         <IconButton
           colorScheme="blue"
