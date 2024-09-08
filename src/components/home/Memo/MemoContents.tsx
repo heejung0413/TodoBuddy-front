@@ -62,7 +62,6 @@ const MemoContents: FC<Props> = ({ id, memo, category }) => {
     }
   };
 
-  console.log(memo);
   return (
     <Box mb={10}>
       {category

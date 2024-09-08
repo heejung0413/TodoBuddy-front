@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@chakra-ui/react';
 import { MemoServices } from '@/api/Services/Memo';
 import { MemoData } from '@/api/@types/Memo';
+import { useDateStore } from '@/stores/date';
 
 export const convertToLocalTime = (dateString: string | number | Date) => {
   const date = new Date(dateString);
@@ -19,69 +20,35 @@ export const convertToLocalTime = (dateString: string | number | Date) => {
   return localTime.toLocaleString(undefined, options);
 };
 
-interface FilteredMemo {
-  CategoryOrderId: number;
-  MemoDeadLine: string;
-}
 const MemoCalendar = () => {
   const today = new Date();
-  const [date, setDate] = useState(today);
   const [todayReset, setTodayReset] = useState<Boolean>(true);
   const [activeStartDate, setActiveStartDate] = useState<Date | null>(today);
+  // const [tooltipContent, setTooltipContent] = useState<string>('');
   const [memo, setMemo] = useState<MemoData[]>([]);
-  const [filteredMemos, setFilteredMemos] = useState<FilteredMemo[]>([]);
+  const { date, setDate } = useDateStore();
+  const formatDate = (value: string) => {
+    return value.split('T')[0];
+  };
+  const deadline = memo.filter(item => item.memoDeadLine).map(value => formatDate(value.memoDeadLine));
 
   const fetchMemo = async () => {
     try {
       const result = await MemoServices.get({ memoStatus: null });
       setMemo(result.data);
-      console.log(memo);
     } catch (e) {
       console.error(e);
     }
   };
 
-  useEffect(() => {
-    fetchMemo();
-  }, []);
-
-  useEffect(() => {
-    // memoDeadLine이 있는 메모들만 필터링하고, CategoryOrderId와 MemoDeadLine 값만 추출
-    const filtered = memo
-      .filter(item => item.memoDeadLine && item.memoDeadLine !== '')
-      .map(item => ({
-        CategoryOrderId: item.categoryOrderId,
-        MemoDeadLine: item.memoDeadLine,
-      }));
-
-    setFilteredMemos(filtered);
-  }, [memo]);
-
-  console.log('filteredMemos', filteredMemos);
-
-  // const attendDay1 = ['2024-08-30', '2023-12-13'];
-
-  // const attendDay = memo
-  //   .map(value => {
-  //     if (value.memoDeadline) {
-  //       return value.memoDeadline.split('T')[0];
-  //     } else {
-  //       return null;
-  //     }
-  //   })
-  //   .filter(date => date !== null); // null 값을 필터링하여 유효한 날짜만 유지  (value.memoDeadline || '').split('T')[0];
-
-  // const attendDay = memo?.filter(value => value.memoDeadline !== '').map(value => value.memoDeadline);
-
-  // console.log(attendDay);
-
   const handleDateChange = newDate => {
     setDate(newDate);
   };
 
-  const handleDayClick = date => {
+  const handleDayClick = (date: Date) => {
     setTodayReset(false);
     setDate(date);
+    // setTooltipContent(`Selected Date:`);
   };
 
   const handleTodayClick = () => {
@@ -89,6 +56,10 @@ const MemoCalendar = () => {
     setActiveStartDate(today);
     setDate(today);
   };
+
+  useEffect(() => {
+    fetchMemo();
+  }, []);
 
   return (
     <S.Container>
@@ -112,15 +83,15 @@ const MemoCalendar = () => {
           if (view === 'month' && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()) {
             html.push(<S.StyledToday key={'today'}>오늘</S.StyledToday>);
           }
-          // if (attendDay.find(x => x === moment(date).format('YYYY-MM-DD'))) {
-          //   html.push(<S.StyledDot key={moment(date).format('YYYY-MM-DD')} />);
-          // }
+          if (deadline.find(x => x === moment(date).format('YYYY-MM-DD'))) {
+            html.push(<S.StyledDot key={moment(date).format('YYYY-MM-DD')} />);
+          }
           return <div style={{ display: 'flex', justifyContent: 'center' }}>{html}</div>;
         }}
         onClickDay={handleDayClick}
         activeStartDate={activeStartDate === null ? undefined : activeStartDate}
         onActiveStartDateChange={({ activeStartDate }) => setActiveStartDate(activeStartDate)}
-      ></S.StyledCalendar>
+      />
     </S.Container>
   );
 };

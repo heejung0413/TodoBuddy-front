@@ -11,6 +11,7 @@ export const Container = styled.div`
   margin-bottom: 100px;
   .react-calendar {
     box-shadow: 4px 2px 10px 0px rgba(0, 0, 0, 0.13);
+    margin: 0 auto;
     padding: 20px;
     background-color: white;
     width: fit-content;
@@ -96,10 +97,10 @@ export const StyledToday = styled.div`
 `;
 
 export const StyledDot = styled.div`
-  background-color: red;
+  background-color: ${colors.brand[300]};
   border-radius: 50%;
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 1rem;
+  height: 1rem;
   margin: 10px auto;
-  transform: translateX(-50%);
+  justify-content: center;
 `;
