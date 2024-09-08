@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
+  parser: '@babel/eslint-parser',
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
