@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { AuthService } from './Services/Auth';
-import { UserServices } from './Services/User';
 
 export const axiosInstance = axios.create({
   baseURL: 'https://api.todobuddy.site/api',

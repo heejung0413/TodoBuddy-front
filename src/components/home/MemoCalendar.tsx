@@ -48,10 +48,10 @@ const MemoCalendar = () => {
   useEffect(() => {
     // memoDeadLine이 있는 메모들만 필터링하고, CategoryOrderId와 MemoDeadLine 값만 추출
     const filtered = memo
-      .filter(item => item.memoDeadline && item.memoDeadline !== '')
+      .filter(item => item.memoDeadLine && item.memoDeadLine !== '')
       .map(item => ({
         CategoryOrderId: item.categoryOrderId,
-        MemoDeadLine: item.memoDeadline,
+        MemoDeadLine: item.memoDeadLine,
       }));
 
     setFilteredMemos(filtered);
@@ -71,9 +71,9 @@ const MemoCalendar = () => {
   //   })
   //   .filter(date => date !== null); // null 값을 필터링하여 유효한 날짜만 유지  (value.memoDeadline || '').split('T')[0];
 
-  const attendDay = memo?.filter(value => value.memoDeadline !== '').map(value => value.memoDeadline);
+  // const attendDay = memo?.filter(value => value.memoDeadline !== '').map(value => value.memoDeadline);
 
-  console.log(attendDay);
+  // console.log(attendDay);
 
   const handleDateChange = newDate => {
     setDate(newDate);
@@ -112,9 +112,9 @@ const MemoCalendar = () => {
           if (view === 'month' && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()) {
             html.push(<S.StyledToday key={'today'}>오늘</S.StyledToday>);
           }
-          if (attendDay.find(x => x === moment(date).format('YYYY-MM-DD'))) {
-            html.push(<S.StyledDot key={moment(date).format('YYYY-MM-DD')} />);
-          }
+          // if (attendDay.find(x => x === moment(date).format('YYYY-MM-DD'))) {
+          //   html.push(<S.StyledDot key={moment(date).format('YYYY-MM-DD')} />);
+          // }
           return <div style={{ display: 'flex', justifyContent: 'center' }}>{html}</div>;
         }}
         onClickDay={handleDayClick}

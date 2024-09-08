@@ -14,7 +14,6 @@ import {
   ModalOverlay,
   Stack,
   useDisclosure,
-  useEditable,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { FC, useEffect, useState } from 'react';
