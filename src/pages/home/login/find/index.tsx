@@ -157,7 +157,6 @@ const LoginFindPage = () => {
                   placeholder="인증코드를 적어주세요!"
                   value={code}
                   onChange={e => setCode(e.target.value)}
-                  // onKeyDown={handleCodeKeyDown}
                   type="number"
                 />
                 <Button colorScheme="brand" onClick={CheckCodeClick}>

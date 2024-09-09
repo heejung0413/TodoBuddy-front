@@ -50,9 +50,9 @@ const LoginPage = () => {
     }
   };
 
-  const handleKeyDown = e => {
+  const handleKeyDown = (e, value: FormValues) => {
     if (e.key === 'Enter') {
-      LoginHandleSubmit(e);
+      LoginHandleSubmit(value);
     }
   };
 
@@ -88,7 +88,12 @@ const LoginPage = () => {
                       {({ field }) => (
                         <FormControl isRequired isInvalid={showErrorDict.password}>
                           <InputGroup size="md" width={300} minW={400}>
-                            <Input {...field} placeholder="비밀번호를 입력하세요." type={show ? 'text' : 'password'} />
+                            <Input
+                              {...field}
+                              placeholder="비밀번호를 입력하세요."
+                              type={show ? 'text' : 'password'}
+                              onKeyDown={handleKeyDown}
+                            />
                             <InputRightElement width="4.5rem">
                               <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
                                 {show ? <IoEyeOutline /> : <IoEyeOffOutline />}

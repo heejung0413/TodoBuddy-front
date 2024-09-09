@@ -8,7 +8,10 @@ export const UserServices: UserClient = {
     try {
       const response = await axiosInstance.post(`${ROUTE}`, request);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        throw new Error('이미 사용 중인 이메일입니다.');
+      }
       throw new Error(error as string);
     }
   },
