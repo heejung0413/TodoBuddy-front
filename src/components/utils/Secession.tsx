@@ -1,14 +1,17 @@
 import { UserServices } from '@/api/Services/User';
 import { Button, Card, CardBody, Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Secession = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
       await UserServices.delete();
+      navigate('/login');
     } catch (e) {
       console.error(e);
     } finally {

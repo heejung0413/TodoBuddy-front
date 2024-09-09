@@ -15,6 +15,9 @@ export const UserServices: UserClient = {
   delete: async () => {
     try {
       const response = await axiosInstance.delete(`${ROUTE}`);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshTokenExpiredDate');
+      localStorage.removeItem('refreshToken');
       return response.data;
     } catch (error) {
       throw new Error(error as string);

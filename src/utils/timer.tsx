@@ -13,7 +13,7 @@ const Timer: React.FC = () => {
 
       return () => clearInterval(timerId); // 컴포넌트 언마운트 시 타이머 정리
     } else {
-      navigate('/'); // 10분이 지나면 '/'로 이동
+      navigate('/');
     }
   }, [timeLeft]);
 

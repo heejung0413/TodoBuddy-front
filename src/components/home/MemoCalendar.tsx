@@ -6,6 +6,7 @@ import { Button } from '@chakra-ui/react';
 import { MemoServices } from '@/api/Services/Memo';
 import { MemoData } from '@/api/@types/Memo';
 import { useDateStore } from '@/stores/date';
+import { useRenderStore } from '@/stores/render';
 
 export const convertToLocalTime = (dateString: string | number | Date) => {
   const date = new Date(dateString);
@@ -24,13 +25,16 @@ const MemoCalendar = () => {
   const today = new Date();
   const [todayReset, setTodayReset] = useState<Boolean>(true);
   const [activeStartDate, setActiveStartDate] = useState<Date | null>(today);
-  // const [tooltipContent, setTooltipContent] = useState<string>('');
   const [memo, setMemo] = useState<MemoData[]>([]);
   const { date, setDate } = useDateStore();
+  const { render } = useRenderStore();
+
   const formatDate = (value: string) => {
     return value.split('T')[0];
   };
   const deadline = memo.filter(item => item.memoDeadLine).map(value => formatDate(value.memoDeadLine));
+
+  useEffect(() => {}, [deadline]);
 
   const fetchMemo = async () => {
     try {
@@ -48,7 +52,6 @@ const MemoCalendar = () => {
   const handleDayClick = (date: Date) => {
     setTodayReset(false);
     setDate(date);
-    // setTooltipContent(`Selected Date:`);
   };
 
   const handleTodayClick = () => {
@@ -59,7 +62,7 @@ const MemoCalendar = () => {
 
   useEffect(() => {
     fetchMemo();
-  }, []);
+  }, [render]);
 
   return (
     <S.Container>

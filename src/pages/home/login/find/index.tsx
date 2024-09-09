@@ -147,16 +147,11 @@ const LoginFindPage = () => {
                 인증코드 유효기간은 10분입니다. <br />
                 10분이 지난 후에는 자동으로 이 페이지에서 나가집니다.
               </Text>
-              <Button
-                colorScheme="brand"
-                my={5}
-                onClick={handleCodeSubmit}
-                isLoading={disabledCodeButton}
-                spinner={<Timer />}
-              >
+              <Button colorScheme="brand" my={5} onClick={handleCodeSubmit} isLoading={disabledCodeButton}>
                 이메일로 인증코드 받기!
               </Button>
               <HStack mx="auto">
+                {disabledCodeButton && <Timer />}
                 <Input
                   w="300px"
                   placeholder="인증코드를 적어주세요!"
