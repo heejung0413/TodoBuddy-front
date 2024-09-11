@@ -1,13 +1,13 @@
-import CreateMemo from '@/components/home/Memo/CreateMemo';
-import MemoCalendar from '@/components/home/MemoCalendar';
-import MemoList from '@/components/home/Memo/MemoList';
-import Secession from '@/components/utils/Secession';
-import { Box } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Box } from '@chakra-ui/react';
 import styled from 'styled-components';
+import CreateMemo from '@/components/home/Memo/CreateMemo';
+import MemoList from '@/components/home/Memo/MemoList';
+import MemoCalendar from '@/components/home/MemoCalendar';
+import Secession from '@/components/utils/Secession';
 
 const HomePage = () => {
-  const [open, setOpen] = useState<Boolean>(true);
+  const [open, setOpen] = useState<boolean>(true);
 
   return (
     <div>
@@ -26,7 +26,6 @@ const HomePage = () => {
     </div>
   );
 };
-
 export default HomePage;
 
 export const MemoBox = styled.div`

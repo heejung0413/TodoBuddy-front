@@ -2,7 +2,6 @@
   "name": "side-project",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/heejung0413/TodoBuddy-front.git"
@@ -37,6 +36,7 @@
     "formik": "^2.4.6",
     "framer-motion": "^11.3.21",
     "moment": "^2.30.1",
+    "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-bootstrap-icons": "^1.11.4",
     "react-calendar": "^5.0.0",
@@ -48,6 +48,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@emotion/eslint-plugin": "^11.12.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
