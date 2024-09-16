@@ -1,22 +1,10 @@
-import { useStateStore } from '@/stores/status';
 import { Button } from '@chakra-ui/react';
+import { MEMO_STATUS_LABEL } from '@/constant/label';
+import { useStateStore } from '@/stores/status';
 
 const FilteredMemo = () => {
   const Status: string[] = ['', 'COMPLETED', 'NOT_COMPLETED'];
   const { status, setStatus } = useStateStore();
-
-  const statusText = (status: string): string => {
-    switch (status) {
-      case '':
-        return '전체';
-      case 'COMPLETED':
-        return '완료';
-      case 'NOT_COMPLETED':
-        return '미완료';
-      default:
-        return '알 수 없음';
-    }
-  };
 
   return (
     <>
@@ -27,7 +15,7 @@ const FilteredMemo = () => {
           onClick={() => setStatus(value)}
           variant={status === value ? 'solid' : 'outline'}
         >
-          {statusText(value)}
+          {MEMO_STATUS_LABEL[value]}
         </Button>
       ))}
     </>
